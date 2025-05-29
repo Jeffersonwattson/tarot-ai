@@ -24,26 +24,6 @@
       cursor: pointer;
       margin-top: 20px;
     }
-    #formBox {
-      display: none;
-      margin-top: 30px;
-    }
-    input[type="text"], input[type="email"] {
-      padding: 8px;
-      margin: 10px;
-      width: 250px;
-    }
-    input[type="submit"] {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    .card-box {
-      margin-top: 30px;
-      background: #f8f8f8;
-      padding: 20px;
-      border-radius: 10px;
-    }
     .card-title {
       font-weight: bold;
       margin-bottom: 10px;
@@ -58,6 +38,14 @@
     .squirrel {
       color: #0b5e8e;
     }
+    .result-box {
+      display: none;
+      margin-top: 30px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f0f0ff;
+    }
     footer {
       margin-top: 50px;
       font-size: 13px;
@@ -68,34 +56,70 @@
 <body>
 
   <h1>🔮 무료 타로 리딩 체험</h1>
-  <p>3장의 타로카드를 뽑고, 너구리 재퍼슨과 부엉이 왓슨의 해석을 들어보세요!</p>
-  <p>※ 심화 해석은 이메일로 무료 제공됩니다 :)</p>
+  <p>22장의 타로 카드 중 3장이 무작위로 선택됩니다.<br>재퍼슨과 왓슨이 각각 긍정/부정의 해석을 드려요!</p>
 
-  <div class="card-box">
-    <div class="card-title">🃏 예시 카드 리딩 결과</div>
-    <div class="squirrel">재퍼슨 왈: "이 카드! 흐름이 좋군요~ 새로운 기회가 온다구요!! ✨ 돈도 들어올 수 있답니당~"</div>
-    <div class="reaper">왓슨 왈: "지금 방심하면 뒤통수 맞습니다. 주변 인간관계, 특히 직장 조심하세요."</div>
-  </div>
+  <button onclick="drawCards()">카드 3장 뽑기</button>
 
-  <button onclick="showForm()">카드 선택 완료</button>
-
-  <div id="formBox">
-    <h2>상담 요청 폼</h2>
-    <form action="https://docs.google.com/forms/YOUR_FORM_URL" target="_blank">
-      <input type="text" name="name" placeholder="이름" required><br>
-      <input type="email" name="email" placeholder="이메일" required><br>
-      <input type="submit" value="상담 요청하기">
-    </form>
+  <div id="resultBox" class="result-box">
+    <div class="card-title">🃏 오늘의 타로 리딩 결과</div>
+    <div id="cards"></div>
+    <div class="squirrel" id="jefferson"></div>
+    <div class="reaper" id="watson"></div>
   </div>
 
   <footer>
-    블로그: <a href="https://blog.naver.com/greenfrog232" target="_blank">세컨머니 실험실</a> — 모든 상담은 무료로 제공됩니다 💌
+    블로그: <a href="https://blog.naver.com/greenfrog232" target="_blank">세컨머니 실험실</a> — 방문해주셔서 감사합니다 💌
   </footer>
 
   <script>
-    function showForm() {
-      document.getElementById("formBox").style.display = "block";
+    const tarotCards = [
+      '愚자 (The Fool)', '마법사 (The Magician)', '여사제 (The High Priestess)',
+      '여왕 (The Empress)', '황제 (The Emperor)', '교황 (The Hierophant)',
+      '연인 (The Lovers)', '전차 (The Chariot)', '힘 (Strength)',
+      '은둔자 (The Hermit)', '운명의 수레바퀴 (Wheel of Fortune)', '정의 (Justice)',
+      '매달린 자 (The Hanged Man)', '죽음 (Death)', '절제 (Temperance)',
+      '악마 (The Devil)', '탑 (The Tower)', '별 (The Star)',
+      '달 (The Moon)', '태양 (The Sun)', '심판 (Judgement)', '세계 (The World)'
+    ];
+
+    const meanings = {
+      '愚자 (The Fool)': ['새로운 시작', '경솔함'],
+      '마법사 (The Magician)': ['기회와 재능', '과신과 조작'],
+      '여사제 (The High Priestess)': ['직관, 비밀', '숨겨진 위험'],
+      '여왕 (The Empress)': ['풍요, 모성', '과도한 의존'],
+      '황제 (The Emperor)': ['권위, 안정', '통제와 억압'],
+      '교황 (The Hierophant)': ['전통, 교육', '고리타분함'],
+      '연인 (The Lovers)': ['사랑, 선택', '유혹과 갈등'],
+      '전차 (The Chariot)': ['의지, 승리', '고집과 충돌'],
+      '힘 (Strength)': ['용기, 인내', '억제된 분노'],
+      '은둔자 (The Hermit)': ['지혜, 탐구', '고립과 회피'],
+      '운명의 수레바퀴 (Wheel of Fortune)': ['전환점', '불확실한 변화'],
+      '정의 (Justice)': ['균형, 정의', '냉정한 평가'],
+      '매달린 자 (The Hanged Man)': ['희생, 통찰', '지체와 무기력'],
+      '죽음 (Death)': ['종말, 새로운 시작', '상실과 변화'],
+      '절제 (Temperance)': ['조화, 중용', '우유부단'],
+      '악마 (The Devil)': ['집착, 유혹', '중독과 억압'],
+      '탑 (The Tower)': ['붕괴, 충격', '파괴적 변화'],
+      '별 (The Star)': ['희망, 치유', '헛된 기대'],
+      '달 (The Moon)': ['환상, 감성', '혼란과 착각'],
+      '태양 (The Sun)': ['성취, 긍정', '과한 낙관'],
+      '심판 (Judgement)': ['깨어남, 결단', '과거의 그림자'],
+      '세계 (The World)': ['완성, 자유', '끝맺음의 두려움']
+    };
+
+    function drawCards() {
+      const shuffled = tarotCards.sort(() => 0.5 - Math.random());
+      const selected = shuffled.slice(0, 3);
+
+      const jeff = selected.map(card => `『${card}』은(는) ${meanings[card][0]}을(를) 상징해요!`).join('<br>');
+      const wats = selected.map(card => `『${card}』은(는) ${meanings[card][1]} 면에서 주의가 필요해.`).join('<br>');
+
+      document.getElementById("cards").innerHTML = `<b>${selected.join(', ')}</b>`;
+      document.getElementById("jefferson").innerHTML = `<b>재퍼슨 왈:</b><br>${jeff}`;
+      document.getElementById("watson").innerHTML = `<b>왓슨 왈:</b><br>${wats}`;
+      document.getElementById("resultBox").style.display = "block";
     }
   </script>
+
 </body>
 </html>
