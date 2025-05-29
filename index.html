@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>무료 타로 리딩</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background-color: #fff;
+    }
+    h1 {
+      font-size: 28px;
+    }
+    p {
+      font-size: 16px;
+      color: #444;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #formBox {
+      display: none;
+      margin-top: 30px;
+    }
+    input[type="text"], input[type="email"] {
+      padding: 8px;
+      margin: 10px;
+      width: 250px;
+    }
+    input[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .card-box {
+      margin-top: 30px;
+      background: #f8f8f8;
+      padding: 20px;
+      border-radius: 10px;
+    }
+    .card-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    .reaper, .squirrel {
+      margin-top: 15px;
+      font-size: 15px;
+    }
+    .reaper {
+      color: #666;
+    }
+    .squirrel {
+      color: #0b5e8e;
+    }
+    footer {
+      margin-top: 50px;
+      font-size: 13px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🔮 무료 타로 리딩 체험</h1>
+  <p>3장의 타로카드를 뽑고, 너구리 재퍼슨과 부엉이 왓슨의 해석을 들어보세요!</p>
+  <p>※ 심화 해석은 이메일로 무료 제공됩니다 :)</p>
+
+  <div class="card-box">
+    <div class="card-title">🃏 예시 카드 리딩 결과</div>
+    <div class="squirrel">재퍼슨 왈: "이 카드! 흐름이 좋군요~ 새로운 기회가 온다구요!! ✨ 돈도 들어올 수 있답니당~"</div>
+    <div class="reaper">왓슨 왈: "지금 방심하면 뒤통수 맞습니다. 주변 인간관계, 특히 직장 조심하세요."</div>
+  </div>
+
+  <button onclick="showForm()">카드 선택 완료</button>
+
+  <div id="formBox">
+    <h2>상담 요청 폼</h2>
+    <form action="https://docs.google.com/forms/YOUR_FORM_URL" target="_blank">
+      <input type="text" name="name" placeholder="이름" required><br>
+      <input type="email" name="email" placeholder="이메일" required><br>
+      <input type="submit" value="상담 요청하기">
+    </form>
+  </div>
+
+  <footer>
+    블로그: <a href="https://blog.naver.com/greenfrog232" target="_blank">세컨머니 실험실</a> — 모든 상담은 무료로 제공됩니다 💌
+  </footer>
+
+  <script>
+    function showForm() {
+      document.getElementById("formBox").style.display = "block";
+    }
+  </script>
+</body>
+</html>
