@@ -9,18 +9,22 @@
     .card-result { margin: 20px 0; }
     .character { font-weight: bold; }
     .summary { background: #ffeaa7; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
-    .card-image { width: 100px; margin: 10px 0; }
+    .footer { font-size: 14px; color: #888; margin-top: 30px; }
   </style>
 </head>
 <body>
 <div class="container">
-  <h1>🔮 오늘의 AI 타로 운세</h1>
-  <p>👁 누적 방문자 수: <span id="visitor-count">불러오는 중...</span>명</p>
+  <h1>🔮 세컨머니 실험실 – 오늘의 AI 타로 운세</h1>
+
   <div class="summary" id="summary"></div>
   <div class="card-result" id="reading"></div>
   <button onclick="drawTarot()">카드 뽑기</button>
   <br><br>
   <button onclick="shareResult()">📤 결과 공유하기</button>
+
+  <div class="footer">
+    👁 누적 방문자 수: <span id="visitor-count">불러오는 중...</span>명
+  </div>
 </div>
 
 <script>
@@ -31,12 +35,12 @@ fetch('https://api.countapi.xyz/hit/jefferson-tarot/v1')
   });
 
 const tarotDeck = {
-  "바보": { "정방향": { score: 3, message: "새로운 시작이에요! 뭐든지 해볼 수 있는 시기예요 💫", char: "재퍼슨", img: "00_Fool.jpg" }, "역방향": { score: -3, message: "생각 없이 질렀지? 이제 후회할 일만 남았다.", char: "왓슨", img: "00_Fool.jpg" } },
-  "마법사": { "정방향": { score: 4, message: "잠재력이 활짝 열리는 시점이에요 ✨ 믿고 해보세용!", char: "재퍼슨", img: "01_Magician.jpg" }, "역방향": { score: -3, message: "허세 부리다 자빠진다. 실력도 안 되면서 과신하지 마.", char: "왓슨", img: "01_Magician.jpg" } },
-  "여교황": { "정방향": { score: 3, message: "조용히 마음을 들여다보면 답이 보여요 🍃", char: "재퍼슨", img: "02_High_Priestess.jpg" }, "역방향": { score: -2, message: "맨날 고민만 하다 시간 다 간다. 결단력 좀 키워.", char: "왓슨", img: "02_High_Priestess.jpg" } },
-  "악마": { "정방향": { score: 1, message: "너무 얽매이지 마세요 😈 집착을 내려놓을 때예요!", char: "재퍼슨", img: "15_Devil.jpg" }, "역방향": { score: -5, message: "중독, 탐욕, 집착… 솔직히 너 지금 헤어나올 생각도 없지?", char: "왓슨", img: "15_Devil.jpg" } },
-  "연인": { "정방향": { score: 4, message: "사랑이 피어나고 있어요 💖 중요한 선택의 순간이에요!", char: "재퍼슨", img: "06_Lovers.jpg" }, "역방향": { score: -4, message: "감정에 휘둘려서 판단력 바닥임. 그냥 막 들이댔다가 다 잃는다.", char: "왓슨", img: "06_Lovers.jpg" } },
-  "태양": { "정방향": { score: 5, message: "모든 게 밝아져요! 좋은 소식이 다가오고 있어요 🌞", char: "재퍼슨", img: "19_Sun.jpg" }, "역방향": { score: -1, message: "웃고 있지만 가식이다. 무리하게 밝은 척 하지 마.", char: "왓슨", img: "19_Sun.jpg" } }
+  "바보": { emoji: "🃏", 정방향: { score: 3, message: "새로운 시작이에요! 뭐든지 해볼 수 있는 시기예요 💫", char: "재퍼슨" }, 역방향: { score: -3, message: "생각 없이 질렀지? 이제 후회할 일만 남았다.", char: "왓슨" } },
+  "마법사": { emoji: "✨", 정방향: { score: 4, message: "잠재력이 활짝 열리는 시점이에요 ✨ 믿고 해보세용!", char: "재퍼슨" }, 역방향: { score: -3, message: "허세 부리다 자빠진다. 실력도 안 되면서 과신하지 마.", char: "왓슨" } },
+  "여교황": { emoji: "👁", 정방향: { score: 3, message: "조용히 마음을 들여다보면 답이 보여요 🍃", char: "재퍼슨" }, 역방향: { score: -2, message: "맨날 고민만 하다 시간 다 간다. 결단력 좀 키워.", char: "왓슨" } },
+  "악마": { emoji: "😈", 정방향: { score: 1, message: "너무 얽매이지 마세요 😈 집착을 내려놓을 때예요!", char: "재퍼슨" }, 역방향: { score: -5, message: "중독, 탐욕, 집착… 솔직히 너 지금 헤어나올 생각도 없지?", char: "왓슨" } },
+  "연인": { emoji: "💞", 정방향: { score: 4, message: "사랑이 피어나고 있어요 💖 중요한 선택의 순간이에요!", char: "재퍼슨" }, 역방향: { score: -4, message: "감정에 휘둘려서 판단력 바닥임. 그냥 막 들이댔다가 다 잃는다.", char: "왓슨" } },
+  "태양": { emoji: "🌞", 정방향: { score: 5, message: "모든 게 밝아져요! 좋은 소식이 다가오고 있어요 🌞", char: "재퍼슨" }, 역방향: { score: -1, message: "웃고 있지만 가식이다. 무리하게 밝은 척 하지 마.", char: "왓슨" } }
 };
 
 function getRandomCard(deck) {
@@ -44,7 +48,8 @@ function getRandomCard(deck) {
   const cardName = keys[Math.floor(Math.random() * keys.length)];
   const direction = Math.random() > 0.5 ? "정방향" : "역방향";
   const data = deck[cardName][direction];
-  return { cardName, direction, ...data };
+  const emoji = deck[cardName].emoji;
+  return { cardName, direction, emoji, ...data };
 }
 
 function drawTarot() {
@@ -62,7 +67,8 @@ function drawTarot() {
   const positions = ["🔙 과거", "🕰 현재", "🔮 미래"];
   let html = "";
   results.forEach((card, idx) => {
-    html += `<p><strong>${positions[idx]}</strong> – ${card.cardName} (${card.direction})<br><img class='card-image' src="images/${card.img}" alt="${card.cardName}"><br>→ "${card.message}" – <span class='character'>${card.char}</span></p>`;
+    const arrow = card.direction === "정방향" ? "→" : "←";
+    html += `<p><strong>${positions[idx]}</strong> – ${card.emoji} ${card.cardName} ${arrow} (${card.direction})<br>→ "${card.message}" – <span class='character'>${card.char}</span></p>`;
   });
   document.getElementById("reading").innerHTML = html;
 }
