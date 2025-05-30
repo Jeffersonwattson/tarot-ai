@@ -1,28 +1,46 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>세컨머니 타로</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>세컨머니 AI 타로</title>
   <style>
-    body { font-family: sans-serif; padding: 2rem; background: #fdfdfd; color: #333; }
-    .card { margin: 1rem 0; font-size: 1.5rem; }
-    .result { margin-top: 2rem; padding: 1rem; background: #eee; border-radius: 0.5rem; }
-    button { font-size: 1rem; padding: 0.5rem 1rem; margin-top: 1rem; }
-    .blog-link { margin-top: 2rem; font-size: 0.9rem; }
+    body {
+      font-family: Arial, sans-serif;
+      background: #fdfaf5;
+      color: #333;
+      text-align: center;
+      padding: 2rem;
+    }
+    .card {
+      font-size: 2rem;
+      margin: 1rem;
+    }
+    #resultArea, #bonusMessage, #summary, #visitorCount {
+      margin-top: 1.5rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      margin: 1rem;
+    }
   </style>
 </head>
 <body>
-  <h1>🔮 오늘의 AI 타로 운세</h1>
-  <div><a href="https://blog.naver.com/greenfrog232" target="_blank">🔗 세컨머니 실험실 블로그 바로가기</a></div>
+  <h1>🔮 세컨머니 AI 타로</h1>
+  <div>
+    <a href="https://blog.naver.com/greenfrog232" target="_blank">
+      🔗 세컨머니 실험실 블로그 바로가기
+    </a>
+  </div>
 
-  <div class="card" id="cardOutput"></div>
   <button onclick="drawCard()">카드 뽑기</button>
-  <div class="result" id="summary"></div>
-  <div class="result" id="bonus"></div>
-  <div class="blog-link">🔗 <a href="https://blog.naver.com/greenfrog232" target="_blank">세컨머니 실험실 블로그로 이동하기</a></div>
-  <div style="margin-top:2rem; font-size:0.8rem;">👣 누적 방문자 수: <span id="visitorCount"></span></div>
+  <button onclick="shareResult()">🔗 공유하기</button>
 
+  <div id="resultArea"></div>
+  <div id="bonusMessage"></div>
+  <div id="summary"></div>
+  <div id="visitorCount"></div>
   <script>
 const tarotDeck = {
   "바보": { emoji: "🃏", 정방향: { score: 3, message: "새로운 시작이에요! 뭐든지 해볼 수 있는 시기예요 💫", char: "재퍼슨" }, 역방향: { score: -3, message: "생각 없이 질렀지? 이제 후회할 일만 남았다.", char: "왓슨" } },
