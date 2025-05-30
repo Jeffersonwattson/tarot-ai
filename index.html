@@ -2,139 +2,78 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> 오늘의 운세 말해줄게 </title>
+  <title>AI 타로 운세 뽑기</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-      background-color: #fff;
-    }
-    h1 {
-      font-size: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
-    }
-    p {
-      font-size: 16px;
-      color: #444;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-    .card-title {
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-    .reaper, .squirrel {
-      margin-top: 15px;
-      font-size: 15px;
-    }
-    .reaper {
-      color: #666;
-    }
-    .squirrel {
-      color: #0b5e8e;
-    }
-    .result-box {
-      display: none;
-      margin-top: 30px;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      background: #f0f0ff;
-    }
-    footer {
-      margin-top: 50px;
-      font-size: 15px;
-      color: #444;
-    }
-    .squirrel::before {
-      content: "🦝 긍정적 재퍼슨 왈: ";
-      font-weight: bold;
-    }
-    .reaper::before {
-      content: "🦉 현실적 왓슨 왈: ";
-      font-weight: bold;
-    }
-    .warning {
-      color: red;
-      font-weight: bold;
-      margin-top: 20px;
-    }
+    body { font-family: 'Segoe UI', sans-serif; background: #f5f5f5; padding: 20px; }
+    .container { max-width: 600px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    .card-result { margin: 20px 0; }
+    .character { font-weight: bold; }
+    .summary { background: #ffeaa7; padding: 15px; border-radius: 5px; margin-bottom: 20px; }
+    .card-image { width: 100px; margin: 10px 0; }
   </style>
 </head>
 <body>
+<div class="container">
+  <h1>🔮 오늘의 AI 타로 운세</h1>
+  <p>👁 누적 방문자 수: <span id="visitor-count">불러오는 중...</span>명</p>
+  <div class="summary" id="summary"></div>
+  <div class="card-result" id="reading"></div>
+  <button onclick="drawTarot()">카드 뽑기</button>
+  <br><br>
+  <button onclick="shareResult()">📤 결과 공유하기</button>
+</div>
 
-  <h1><span>🦝</span> 무료 타로 리딩 체험 <span>🦉</span></h1>
-  <p>3장의 타로카드를 뽑고, 너구리 재퍼슨과 부엉이 왓슨의 해석을 들어보세요!</p>
+<script>
+fetch('https://api.countapi.xyz/hit/jefferson-tarot/v1')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('visitor-count').innerText = data.value;
+  });
 
-  <button onclick="drawCards()">카드 3장 뽑기</button>
+const tarotDeck = {
+  "바보": { "정방향": { score: 3, message: "새로운 시작이에요! 뭐든지 해볼 수 있는 시기예요 💫", char: "재퍼슨", img: "00_Fool.jpg" }, "역방향": { score: -3, message: "생각 없이 질렀지? 이제 후회할 일만 남았다.", char: "왓슨", img: "00_Fool.jpg" } },
+  "마법사": { "정방향": { score: 4, message: "잠재력이 활짝 열리는 시점이에요 ✨ 믿고 해보세용!", char: "재퍼슨", img: "01_Magician.jpg" }, "역방향": { score: -3, message: "허세 부리다 자빠진다. 실력도 안 되면서 과신하지 마.", char: "왓슨", img: "01_Magician.jpg" } },
+  "여교황": { "정방향": { score: 3, message: "조용히 마음을 들여다보면 답이 보여요 🍃", char: "재퍼슨", img: "02_High_Priestess.jpg" }, "역방향": { score: -2, message: "맨날 고민만 하다 시간 다 간다. 결단력 좀 키워.", char: "왓슨", img: "02_High_Priestess.jpg" } },
+  "악마": { "정방향": { score: 1, message: "너무 얽매이지 마세요 😈 집착을 내려놓을 때예요!", char: "재퍼슨", img: "15_Devil.jpg" }, "역방향": { score: -5, message: "중독, 탐욕, 집착… 솔직히 너 지금 헤어나올 생각도 없지?", char: "왓슨", img: "15_Devil.jpg" } },
+  "연인": { "정방향": { score: 4, message: "사랑이 피어나고 있어요 💖 중요한 선택의 순간이에요!", char: "재퍼슨", img: "06_Lovers.jpg" }, "역방향": { score: -4, message: "감정에 휘둘려서 판단력 바닥임. 그냥 막 들이댔다가 다 잃는다.", char: "왓슨", img: "06_Lovers.jpg" } },
+  "태양": { "정방향": { score: 5, message: "모든 게 밝아져요! 좋은 소식이 다가오고 있어요 🌞", char: "재퍼슨", img: "19_Sun.jpg" }, "역방향": { score: -1, message: "웃고 있지만 가식이다. 무리하게 밝은 척 하지 마.", char: "왓슨", img: "19_Sun.jpg" } }
+};
 
-  <div id="resultBox" class="result-box">
-    <div class="card-title">🃏 오늘의 타로 리딩 결과</div>
-    <div id="cards"></div>
-    <div class="squirrel" id="jefferson"></div>
-    <div class="reaper" id="watson"></div>
-  </div>
+function getRandomCard(deck) {
+  const keys = Object.keys(deck);
+  const cardName = keys[Math.floor(Math.random() * keys.length)];
+  const direction = Math.random() > 0.5 ? "정방향" : "역방향";
+  const data = deck[cardName][direction];
+  return { cardName, direction, ...data };
+}
 
-  <div id="warningBox" class="warning" style="display: none;">
-    너무 자주 뽑으셨어요! 🦝 행운은 이미 너의 손에 있는걸?<br>
-    👉 <a href="https://blog.naver.com/greenfrog232" target="_blank">세컨머니 실험실 블로그 보러가기</a>
-  </div>
+function drawTarot() {
+  const results = [getRandomCard(tarotDeck), getRandomCard(tarotDeck), getRandomCard(tarotDeck)];
+  const total = results.reduce((sum, card) => sum + card.score, 0);
 
-  <footer>
-    <strong><a href="https://blog.naver.com/greenfrog232" target="_blank" style="font-size: 18px; text-decoration: none; color: #333;">세컨머니 실험실</a></strong><br>
-    더 아끼고 더 버는 법!
-  </footer>
+  let summary = "";
+  if (total >= 9) summary = "🦝 재퍼슨 says: 오늘은 운수대통이에요! 뭐든 잘 풀릴거예용 ✨";
+  else if (total >= 4) summary = "🦝 재퍼슨 says: 무난한 하루가 될 것 같아요~ 따뜻하게 보내세요 ☕";
+  else if (total >= -3) summary = "🦉 왓슨 says: 복불복이다. 오늘 중심 잘 잡아라.";
+  else summary = "🦉 왓슨 says: 운 없다. 긴장 타라. 움직일수록 꼬인다.";
 
-  <script>
-    const tarotCards = [
-      '愚자 (The Fool)', '마법사 (The Magician)', '여사제 (The High Priestess)',
-      '여왕 (The Empress)', '황제 (The Emperor)', '교황 (The Hierophant)',
-      '연인 (The Lovers)', '전차 (The Chariot)', '힘 (Strength)',
-      '은둔자 (The Hermit)', '운명의 수레바퀴 (Wheel of Fortune)', '정의 (Justice)',
-      '매달린 자 (The Hanged Man)', '죽음 (Death)', '절제 (Temperance)',
-      '악마 (The Devil)', '탑 (The Tower)', '별 (The Star)',
-      '달 (The Moon)', '태양 (The Sun)', '심판 (Judgement)', '세계 (The World)'
-    ];
+  document.getElementById("summary").innerText = summary;
 
-    let clickCount = 0;
-    let isLocked = false;
+  const positions = ["🔙 과거", "🕰 현재", "🔮 미래"];
+  let html = "";
+  results.forEach((card, idx) => {
+    html += `<p><strong>${positions[idx]}</strong> – ${card.cardName} (${card.direction})<br><img class='card-image' src="images/${card.img}" alt="${card.cardName}"><br>→ "${card.message}" – <span class='character'>${card.char}</span></p>`;
+  });
+  document.getElementById("reading").innerHTML = html;
+}
 
-    function drawCards() {
-      if (isLocked) return;
-      clickCount++;
-
-      if (clickCount > 3) {
-        document.getElementById("resultBox").style.display = "none";
-        document.getElementById("warningBox").style.display = "block";
-        isLocked = true;
-        setTimeout(() => {
-          clickCount = 0;
-          isLocked = false;
-          document.getElementById("warningBox").style.display = "none";
-        }, 60000);
-        return;
-      }
-
-      const selected = [];
-      while (selected.length < 3) {
-        const rand = tarotCards[Math.floor(Math.random() * tarotCards.length)];
-        if (!selected.includes(rand)) selected.push(rand);
-      }
-
-      document.getElementById("cards").innerHTML = `<b>${selected.join(', ')}</b>`;
-      document.getElementById("jefferson").innerText = "오늘은 좋은 기운이 흐르고 있어요! 특히 " + selected[0] + " 카드가 긍정적이에요~ 용기 있게 나아가보세요 ✨";
-      document.getElementById("watson").innerText = "하지만 현실적으로 보면 " + selected[2] + " 카드가 말해주듯, 조심해야 할 일도 있습니다. 감정에만 휘둘리지 마세요.";
-      document.getElementById("resultBox").style.display = "block";
-    }
-  </script>
+function shareResult() {
+  const summaryText = document.getElementById("summary").innerText;
+  const text = `오늘의 타로 운세:\n${summaryText}`;
+  navigator.clipboard.writeText(text).then(() => {
+    alert("결과가 복사되었습니다! 블로그나 SNS에 붙여넣기 해보세요 ✨");
+  });
+}
+</script>
 </body>
 </html>
