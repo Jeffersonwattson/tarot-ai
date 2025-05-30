@@ -3,127 +3,145 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>세컨머니 실험실 - 오늘의 타로 운세</title>
+  <title>세컨머니 실험실 - 오늘의 AI 타로 운세</title>
   <style>
     body {
       font-family: 'Arial', sans-serif;
-      background-color: #fff8f0;
+      background-color: #f8f9fa;
       padding: 2rem;
       max-width: 600px;
       margin: auto;
-      line-height: 1.6;
     }
     h1, h2 {
       text-align: center;
     }
-    .card {
+    .summary {
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
       padding: 1rem;
-      margin: 1rem 0;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      background-color: #ffffff;
-    }
-    .special-message {
-      padding: 1rem;
-      margin-top: 2rem;
-      background-color: #e3fcef;
-      border: 2px dashed #34a853;
       border-radius: 8px;
-      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .card {
+      background-color: white;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    .card strong {
+      display: inline-block;
+      margin-bottom: 0.3rem;
+    }
+    #bonus-message {
+      background-color: #d4edda;
+      border: 1px solid #c3e6cb;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-top: 1rem;
       display: none;
     }
-    .summary {
-      font-size: 1.2rem;
-      font-weight: bold;
-      text-align: center;
-      margin-top: 2rem;
-    }
     footer {
-      margin-top: 4rem;
-      font-size: 0.9rem;
+      margin-top: 2rem;
       text-align: center;
-      color: #777;
+      font-size: 0.9rem;
+      color: #6c757d;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <h1>🧪 세컨머니 실험실</h1>
-  <h2>🔮 오늘의 타로 운세</h2>
-  
-  <div id="tarot-results"></div>
+  <h1>🔮 세컨머니 실험실 – 오늘의 AI 타로 운세</h1>
   <div class="summary" id="summary"></div>
-  <div class="special-message" id="bonus-message"></div>
+  <div id="reading"></div>
+  <div id="bonus-message"></div>
+  <button onclick="drawCards()">카드 뽑기</button>
+  <br>
+  <button onclick="shareResult()">📤 결과 공유하기</button>
 
   <footer>
     👉 본 서비스는 <a href="https://blog.naver.com/greenfrog232" target="_blank">세컨머니 실험실 블로그</a>에서 운영됩니다.<br>
-    누적 이용자: <span id="visitor-count">...</span>
+    👁 누적 방문자 수: <span id="visitor-count">불러오는 중...</span>
   </footer>
 
   <script>
     const tarotDeck = {
-      "바보": { emoji: "🃏", 정방향: { score: 3, message: "새로운 시작이에요! 뭐든지 해볼 수 있는 시기예요 💫", char: "재퍼슨" }, 역방향: { score: -3, message: "생각 없이 질렀지? 이제 후회할 일만 남았다.", char: "왓슨" } },
-      "마법사": { emoji: "✨", 정방향: { score: 4, message: "잠재력이 활짝 열리는 시점이에요 ✨ 믿고 해보세용!", char: "재퍼슨" }, 역방향: { score: -3, message: "허세 부리다 자빠진다. 실력도 안 되면서 과신하지 마.", char: "왓슨" } },
-      // ... (생략: 다른 카드들 포함됨)
-      "세계": { emoji: "🌍", 정방향: { score: 5, message: "완성, 성취, 통합! 지금 최고예요 🌍", char: "재퍼슨" }, 역방향: { score: -2, message: "끝난 줄 알았지? 미완의 마무리야. 한 번 더 봐봐.", char: "왓슨" } }
+      "여교황": { emoji: "👁", 정방향: { score: 3, message: "조용히 마음을 들여다보면 답이 보여요 🍃", char: "재퍼슨" }, 역방향: { score: -2, message: "맨날 고민만 하다 시간 다 간다. 결단력 좀 키워.", char: "왓슨" } },
+      "연인": { emoji: "💞", 정방향: { score: 4, message: "사랑이 피어나고 있어요 💖 중요한 선택의 순간이에요!", char: "재퍼슨" }, 역방향: { score: -4, message: "감정에 휘둘려서 판단력 바닥임. 그냥 막 들이댔다가 다 잃는다.", char: "왓슨" } }
     };
 
-    const specialCombos = [
-      ["바보", "운명의 수레바퀴", "태양"],
-      ["연인", "마법사", "세계"],
-      ["전차", "힘", "정의"],
-      ["별", "여제", "태양"],
-      ["죽음", "심판", "세계"]
-    ];
+    const positions = ['과거', '현재', '미래'];
+    const specialCombos = [['여교황', '연인', '태양']];
 
-    function displayResults(cards) {
-      let totalScore = 0;
-      const resultDiv = document.getElementById("tarot-results");
-      resultDiv.innerHTML = "";
-
-      cards.forEach(c => {
-        const cardData = tarotDeck[c.name];
-        const isUpright = c.upright;
-        const detail = isUpright ? cardData.정방향 : cardData.역방향;
-        totalScore += detail.score;
-        resultDiv.innerHTML += `<div class='card'>${cardData.emoji} <strong>${c.name}</strong> (${isUpright ? '정방향 ↑' : '역방향 ↓'})<br><em>${detail.char} says:</em> ${detail.message}</div>`;
-      });
-
-      const summary = document.getElementById("summary");
-      if (totalScore >= 9) {
-        summary.textContent = "✨ 재퍼슨 says: 오늘은 운수대통! 좋은 기회가 많을 거예요!";
-      } else if (totalScore <= -6) {
-        summary.textContent = "🦉 왓슨 says: 오늘은 쉽지 않은 날이에요. 침착하게 대응하세요.";
-      } else {
-        summary.textContent = "🤔 오늘은 평범한 하루! 그래도 마음가짐이 제일 중요해요!";
+    function drawCards() {
+      const names = Object.keys(tarotDeck);
+      const selected = [];
+      while (selected.length < 3) {
+        const pick = names[Math.floor(Math.random() * names.length)];
+        if (!selected.includes(pick)) selected.push(pick);
       }
+      const result = selected.map(name => ({
+        name,
+        upright: Math.random() > 0.5
+      }));
+      displayCards(result);
+    }
 
-      // 보너스 메시지 조건
-      const drawnNames = cards.filter(c => c.upright).map(c => c.name).sort();
-      const bonusDiv = document.getElementById("bonus-message");
+    function displayCards(cards) {
+      const summary = document.getElementById('summary');
+      const reading = document.getElementById('reading');
+      const bonus = document.getElementById('bonus-message');
+      reading.innerHTML = '';
+      let total = 0;
+      cards.forEach((card, i) => {
+        const data = tarotDeck[card.name];
+        const detail = card.upright ? data.정방향 : data.역방향;
+        total += detail.score;
+        reading.innerHTML += `<div class="card">🔁 <strong>${positions[i]}</strong> – ${data.emoji} ${card.name} → (${card.upright ? '정방향' : '역방향'})<br>→ "${detail.message}" – <strong>${detail.char}</strong></div>`;
+      });
+      if (total >= 4) summary.innerHTML = '🦝 재퍼슨 says: 무난한 하루가 될 것 같아요~ 따뜻하게 보내세요 ☕';
+      else if (total <= -2) summary.innerHTML = '🦉 왓슨 says: 오늘은 긴장해야 할 수도… 문제가 생길지도 몰라요.';
+      else summary.innerHTML = '🤔 오늘은 흘러가는 대로. 특별한 일은 없을 듯해요.';
+
+      const uprightNames = cards.filter(c => c.upright).map(c => c.name).sort();
       specialCombos.forEach(combo => {
-        const sortedCombo = combo.slice().sort();
-        if (JSON.stringify(drawnNames) === JSON.stringify(sortedCombo)) {
-          bonusDiv.style.display = "block";
-          bonusDiv.textContent = "🍀 네잎클로버 등장! 오늘 복권 사도 될지도!?";
+        if (JSON.stringify(uprightNames.sort()) === JSON.stringify(combo.sort())) {
+          bonus.style.display = 'block';
+          bonus.textContent = '🍀 네잎클로버 등장! 오늘 복권 사도 될지도!? 🌟💰 (레어)'
+        } else {
+          bonus.style.display = 'none';
         }
       });
     }
 
-    // 샘플 카드 뽑기 시뮬레이션 (테스트용)
-    const allCardNames = Object.keys(tarotDeck);
-    const drawThree = () => {
-      const shuffled = allCardNames.sort(() => 0.5 - Math.random());
-      return shuffled.slice(0, 3).map(name => ({ name, upright: Math.random() < 0.5 }));
-    };
-    const drawn = drawThree();
-    displayResults(drawn);
+    function shareResult() {
+      const summaryText = document.getElementById('summary').innerText;
+      const readingText = document.getElementById('reading').innerText;
+      const text = `오늘의 타로 운세 🌠\n\n${summaryText}\n\n${readingText}\n\n👉 전체 보기: https://jeffersonwattson.github.io/tarot-ai/`;
+      navigator.clipboard.writeText(text).then(() => alert('결과가 복사되었습니다!')); 
+    }
 
-    // 방문자 수 증가 (LocalStorage 활용)
-    const countKey = "tarot-visitor-count";
-    let count = parseInt(localStorage.getItem(countKey) || "0", 10);
-    count += 1;
-    localStorage.setItem(countKey, count);
-    document.getElementById("visitor-count").textContent = `${count.toLocaleString()}명`;
+    // 방문자 수 (로컬 저장)
+    const visitKey = 'tarot-visit-count';
+    let visit = localStorage.getItem(visitKey);
+    visit = visit ? parseInt(visit) + 1 : 1;
+    localStorage.setItem(visitKey, visit);
+    document.getElementById('visitor-count').textContent = `${visit.toLocaleString()}명`;
+
+    // 시작 시 자동 실행
+    drawCards();
   </script>
 </body>
 </html>
+
