@@ -24,10 +24,16 @@
       padding: 0.5rem 1rem;
       margin: 1rem;
     }
+    a {
+      text-decoration: none;
+      color: #0073e6;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <h1>🔮 세컨머니 AI 타로</h1>
+
   <div>
     <a href="https://blog.naver.com/greenfrog232" target="_blank">
       🔗 세컨머니 실험실 블로그 바로가기
@@ -41,8 +47,10 @@
   <div id="bonusMessage"></div>
   <div id="summary"></div>
   <div id="visitorCount"></div>
+
+  <!-- 아래 script부터는 당신이 붙여넣을 스크립트 코드 자리입니다 -->
   <script>
-const tarotDeck = {
+    const tarotDeck = {
   "바보": { emoji: "🃏", 정방향: { score: 3, message: "새로운 시작이에요! 뭐든지 해볼 수 있는 시기예요 💫", char: "재퍼슨" }, 역방향: { score: -3, message: "생각 없이 질렀지? 이제 후회할 일만 남았다.", char: "왓슨" } },
   "마법사": { emoji: "✨", 정방향: { score: 4, message: "잠재력이 활짝 열리는 시점이에요 ✨ 믿고 해보세용!", char: "재퍼슨" }, 역방향: { score: -3, message: "허세 부리다 자빠진다. 실력도 안 되면서 과신하지 마.", char: "왓슨" } },
   "여교황": { emoji: "👁", 정방향: { score: 3, message: "조용히 마음을 들여다보면 답이 보여요 🍃", char: "재퍼슨" }, 역방향: { score: -2, message: "맨날 고민만 하다 시간 다 간다. 결단력 좀 키워.", char: "왓슨" } },
@@ -76,6 +84,8 @@ const bonusCombinations = [
 
 // 아래 drawCard 등 기능은 기존 코드에 추가로 붙이시면 됩니다.
   </script>
+  </script>
 </body>
 </html>
+
 
