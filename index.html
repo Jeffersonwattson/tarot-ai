@@ -57,27 +57,27 @@
 </style>
   <script>
 const tarotDeck = {
-  "The Fool": { up: { score: 7, emoji: "🤡" }, down: { score: 3, emoji: "🤡" } },
-  "The Magician": { up: { score: 8, emoji: "🧙" }, down: { score: 4, emoji: "🧙" } },
-  "The High Priestess": { up: { score: 8, emoji: "👸" }, down: { score: 5, emoji: "👸" } },
-  "The Empress": { up: { score: 9, emoji: "👑" }, down: { score: 5, emoji: "👑" } },
-  "The Emperor": { up: { score: 9, emoji: "🦁" }, down: { score: 6, emoji: "🦁" } },
-  "The Hierophant": { up: { score: 8, emoji: "🙏" }, down: { score: 5, emoji: "🙏" } },
-  "The Lovers": { up: { score: 10, emoji: "💘" }, down: { score: 4, emoji: "💘" } },
-  "The Chariot": { up: { score: 9, emoji: "🏎️" }, down: { score: 4, emoji: "🏎️" } },
-  "Strength": { up: { score: 8, emoji: "💪" }, down: { score: 4, emoji: "💪" } },
-  "The Hermit": { up: { score: 7, emoji: "🧘" }, down: { score: 3, emoji: "🧘" } },
-  "Wheel of Fortune": { up: { score: 10, emoji: "🎡" }, down: { score: 5, emoji: "🎡" } },
-  "Justice": { up: { score: 8, emoji: "⚖️" }, down: { score: 5, emoji: "⚖️" } },
-  "The Hanged Man": { up: { score: 6, emoji: "🙃" }, down: { score: 2, emoji: "🙃" } },
-  "Death": { up: { score: 9, emoji: "💀" }, down: { score: 3, emoji: "💀" } },
-  "Temperance": { up: { score: 8, emoji: "🌈" }, down: { score: 4, emoji: "🌈" } },
-  "The Devil": { up: { score: 6, emoji: "😈" }, down: { score: 3, emoji: "😈" } },
+  "빡통": { up: { score: 7, emoji: "🤡" }, down: { score: 3, emoji: "🤡" } },
+  "마법사": { up: { score: 8, emoji: "🧙" }, down: { score: 4, emoji: "🧙" } },
+  "여사제": { up: { score: 8, emoji: "👸" }, down: { score: 5, emoji: "👸" } },
+  "여황제": { up: { score: 9, emoji: "👑" }, down: { score: 5, emoji: "👑" } },
+  "황제": { up: { score: 9, emoji: "🦁" }, down: { score: 6, emoji: "🦁" } },
+  "교황": { up: { score: 8, emoji: "🙏" }, down: { score: 5, emoji: "🙏" } },
+  "연인": { up: { score: 10, emoji: "💘" }, down: { score: 4, emoji: "💘" } },
+  "전차": { up: { score: 9, emoji: "🏎️" }, down: { score: 4, emoji: "🏎️" } },
+  "힘,기백": { up: { score: 8, emoji: "💪" }, down: { score: 4, emoji: "💪" } },
+  "은둔자,찐따": { up: { score: 7, emoji: "🧘" }, down: { score: 3, emoji: "🧘" } },
+  "운명의 수레바퀴": { up: { score: 10, emoji: "🎡" }, down: { score: 5, emoji: "🎡" } },
+  "정의": { up: { score: 8, emoji: "⚖️" }, down: { score: 5, emoji: "⚖️" } },
+  "매달린사람": { up: { score: 6, emoji: "🙃" }, down: { score: 2, emoji: "🙃" } },
+  "죽음": { up: { score: 9, emoji: "💀" }, down: { score: 3, emoji: "💀" } },
+  "절제": { up: { score: 8, emoji: "🌈" }, down: { score: 4, emoji: "🌈" } },
+  "악마": { up: { score: 6, emoji: "😈" }, down: { score: 3, emoji: "😈" } },
   "The Tower": { up: { score: 7, emoji: "🌩️" }, down: { score: 2, emoji: "🌩️" } },
   "The Star": { up: { score: 10, emoji: "⭐" }, down: { score: 6, emoji: "⭐" } },
   "The Moon": { up: { score: 7, emoji: "🌙" }, down: { score: 4, emoji: "🌙" } },
   "The Sun": { up: { score: 10, emoji: "☀️" }, down: { score: 6, emoji: "☀️" } },
-  "Judgement": { up: { score: 9, emoji: "📣" }, down: { score: 5, emoji: "📣" } },
+  "심판": { up: { score: 9, emoji: "📣" }, down: { score: 5, emoji: "📣" } },
   "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } }
 };
 </script>
@@ -154,10 +154,21 @@ const totalScore = selectedSet.reduce(
   (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
   0
 );
+const rareCombos = {
+  "연인⬆️-The Sun⬆️-The World⬆️": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
+  "죽음⬇️-The Tower⬇️-악마⬇️": "심상치 않은 조합입니다. 격변의 하루, 내면을 단단히 다잡으세요. (레어)",
+  "운명의 수레바퀴⬆️-정의⬆️-심판⬆️": "운명과 정의, 그리고 심판! 변화가 다가오며 결과가 뒤따릅니다 ⚖️🌀📣 (레어)",
+  "The Star⬆️-The Moon⬆️-The Sun⬆️": "밤과 낮의 경계에서 기회가 피어납니다. 예술적, 감성적 흐름이 강해지는 날이에요 🌟🌙☀️ (레어)",
+  "빡통⬇️-은둔자,찐따⬇️-매달린사람⬇️": "혼자만의 세계에 빠질 수 있어요. 오늘은 사람 많은 곳 피하고 조용히 보내보세요... (레어)",
+  // 필요한 만큼 추가 가능
+};
 
-
-// 여기! 조합 해석 메시지 생성
+  const currentComboKey = selectedSet
+  .map((c) => `${c.name}${c.orientation === "up" ? "⬆️" : "⬇️"}`)
+  .join("-");
 let comboMessage = "";
+if (rareCombos[currentComboKey]) {
+  comboMessage = rareCombos[currentComboKey];
 if (upCount === 3) {
   comboMessage = "정방향 3장! 오늘 하루가 당신 편이에요 🎯 운의 흐름이 강하게 따라붙습니다.\n결단력이 필요한 일에서 확신을 가져보세요!";
 } else if (downCount === 3) {
@@ -169,7 +180,6 @@ if (upCount === 3) {
 } else {
   comboMessage = "정역이 반반이에요. 운과 선택의 경계선 위에 서 있어요 ⚖️\n특히 마지막 카드가 힌트가 될 수 있어요. 다시 한 번 들여다보세요.";
 }
-
 
   let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
   selectedSet.forEach((card, i) => {
