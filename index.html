@@ -173,18 +173,32 @@ if (upCount === 3) {
 
   let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
   selectedSet.forEach((card, i) => {
-    const info = tarotDeck[card.name][card.orientation];
-    const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
-    const direction = card.orientation === "up" ? "정방향" : "역방향";
-    resultHTML += `
-      <div class="card">
-        ${info.emoji} ${card.name} ${arrow} (${direction})<br>
-        점수: ${info.score}점
-      </div>
-    `;
-  });
-  resultHTML += `<p>총합: <strong>${totalScore}점</strong></p>`;
-  resultHTML += `<p><strong>${comboMessage}</strong></p>`; // ✅ 이 줄 추가
+ const info = tarotDeck[card.name][card.orientation];
+  const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
+  const direction = card.orientation === "up" ? "정방향" : "역방향";
+  resultHTML += `
+    <div class="card">
+      ${info.emoji} ${card.name} ${arrow} (${direction})<br>
+      점수: ${info.score}점
+    </div>
+  `;
+});
+
+// ✅ comboMessage 먼저 출력
+resultHTML += `<p><strong>${comboMessage}</strong></p>`;
+
+// ✅ ratingText 출력
+let percent = Math.round((totalScore / 30) * 100);
+let ratingText = `총합: ${totalScore}점 (상위 ${percent}%)`;
+
+if (totalScore === 30) {
+  ratingText = `총합: 30점 (만점!)`;
+} else if (totalScore <= 10) {
+  ratingText = `총합: ${totalScore}점 (운보소 ㅋㅋㅋ)`;
+}
+resultHTML += `<p><strong>${ratingText}</strong></p>`;
+
+// ✅ result 출력
 document.getElementById("resultArea").innerHTML = resultHTML;
 
   // B, C 카드 요약
