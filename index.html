@@ -76,30 +76,31 @@
   <div id="summary"></div>
 
  <script>
-  const tarotDeck = {
-    "바보": { emoji: "🤪", upright: { score: 3, text: "모험, 무지" }, reversed: { score: 1, text: "경솔, 어리석음" } },
-    "마법사": { emoji: "🧙‍♂️", upright: { score: 4, text: "창조, 수완" }, reversed: { score: 2, text: "겁많음, 기만" } },
-    "여교황": { emoji: "📚", upright: { score: 3, text: "지식, 총명" }, reversed: { score: 1, text: "잔혹, 무례함" } },
-    "여제": { emoji: "👸", upright: { score: 4, text: "풍양, 모성" }, reversed: { score: 2, text: "과잉, 허영" } },
-    "황제": { emoji: "🤴", upright: { score: 4, text: "책임, 부성" }, reversed: { score: 2, text: "오만, 존대" } },
-    "교황": { emoji: "🙏", upright: { score: 3, text: "가르침, 관대함" }, reversed: { score: 1, text: "협량, 나태" } },
-    "연인": { emoji: "💑", upright: { score: 4, text: "연애, 쾌락" }, reversed: { score: 2, text: "질투, 배신" } },
-    "전차": { emoji: "🚗", upright: { score: 4, text: "전진, 승리" }, reversed: { score: 2, text: "폭주, 좌절" } },
-    "힘": { emoji: "💪", upright: { score: 3, text: "힘, 용기" }, reversed: { score: 1, text: "자만, 본성" } },
-    "은둔자": { emoji: "🕯️", upright: { score: 3, text: "탐색, 사려깊음" }, reversed: { score: 1, text: "폐쇄, 음습" } },
-    "운명의 수레바퀴": { emoji: "🎡", upright: { score: 4, text: "기회, 행운" }, reversed: { score: 1, text: "불운, 오산" } },
-    "정의": { emoji: "⚖️", upright: { score: 3, text: "균형, 정당함" }, reversed: { score: 1, text: "편견, 불균형" } },
-    "매달린 사람": { emoji: "🪢", upright: { score: 3, text: "희생, 인내" }, reversed: { score: 1, text: "무의미한 희생" } },
-    "죽음": { emoji: "💀", upright: { score: 2, text: "격변, 이별" }, reversed: { score: 2, text: "고착, 변화 유보" } },
-    "절제": { emoji: "🥛", upright: { score: 3, text: "조화, 견실" }, reversed: { score: 1, text: "낭비, 불안정" } },
-    "악마": { emoji: "😈", upright: { score: 2, text: "사심, 타락" }, reversed: { score: 2, text: "각성, 단절" } },
-    "탑": { emoji: "🗼", upright: { score: 1, text: "파괴, 충격" }, reversed: { score: 2, text: "필요한 파괴" } },
-    "별": { emoji: "🌟", upright: { score: 4, text: "희망, 동경" }, reversed: { score: 2, text: "환멸, 비애" } },
-    "달": { emoji: "🌙", upright: { score: 2, text: "불안, 혼돈" }, reversed: { score: 3, text: "불안 해소, 명료함" } },
-    "태양": { emoji: "🌞", upright: { score: 5, text: "만족, 미래" }, reversed: { score: 3, text: "지연, 실패" } },
-    "심판": { emoji: "📯", upright: { score: 4, text: "부활, 개선" }, reversed: { score: 2, text: "후회, 불능" } },
-    "세계": { emoji: "🌍", upright: { score: 5, text: "완성, 완전" }, reversed: { score: 3, text: "미완성, 어중간함" } }
-  };
+ const tarotDeck = {
+  "The Fool": { up: { score: 7, emoji: "🤡" }, down: { score: 3, emoji: "🤡" } },
+  "The Magician": { up: { score: 8, emoji: "🧙" }, down: { score: 4, emoji: "🧙" } },
+  "The High Priestess": { up: { score: 8, emoji: "👸" }, down: { score: 5, emoji: "👸" } },
+  "The Empress": { up: { score: 9, emoji: "👑" }, down: { score: 5, emoji: "👑" } },
+  "The Emperor": { up: { score: 9, emoji: "🦁" }, down: { score: 6, emoji: "🦁" } },
+  "The Hierophant": { up: { score: 8, emoji: "🙏" }, down: { score: 5, emoji: "🙏" } },
+  "The Lovers": { up: { score: 10, emoji: "💘" }, down: { score: 4, emoji: "💘" } },
+  "The Chariot": { up: { score: 9, emoji: "🏎️" }, down: { score: 4, emoji: "🏎️" } },
+  "Strength": { up: { score: 8, emoji: "💪" }, down: { score: 4, emoji: "💪" } },
+  "The Hermit": { up: { score: 7, emoji: "🧘" }, down: { score: 3, emoji: "🧘" } },
+  "Wheel of Fortune": { up: { score: 10, emoji: "🎡" }, down: { score: 5, emoji: "🎡" } },
+  "Justice": { up: { score: 8, emoji: "⚖️" }, down: { score: 5, emoji: "⚖️" } },
+  "The Hanged Man": { up: { score: 6, emoji: "🙃" }, down: { score: 2, emoji: "🙃" } },
+  "Death": { up: { score: 9, emoji: "💀" }, down: { score: 3, emoji: "💀" } },
+  "Temperance": { up: { score: 8, emoji: "🌈" }, down: { score: 4, emoji: "🌈" } },
+  "The Devil": { up: { score: 6, emoji: "😈" }, down: { score: 3, emoji: "😈" } },
+  "The Tower": { up: { score: 7, emoji: "🌩️" }, down: { score: 2, emoji: "🌩️" } },
+  "The Star": { up: { score: 10, emoji: "⭐" }, down: { score: 6, emoji: "⭐" } },
+  "The Moon": { up: { score: 7, emoji: "🌙" }, down: { score: 4, emoji: "🌙" } },
+  "The Sun": { up: { score: 10, emoji: "☀️" }, down: { score: 6, emoji: "☀️" } },
+  "Judgement": { up: { score: 9, emoji: "📣" }, down: { score: 5, emoji: "📣" } },
+  "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } },
+};
+
 
   let drawnCards = [];
   let phase = 0;
@@ -138,7 +139,7 @@
 
   function summarizeReading() {
     const total = drawnCards.reduce((sum, c) => sum + tarotDeck[c.name][c.orientation].score, 0);
-    const summary = `총점: ${total}점 / 최고점: 15점`;
+    const summary = `총점: ${total}점 / 최고점: 30점`;
     const interp = drawnCards.map(c => `${tarotDeck[c.name].emoji} ${c.name}: ${tarotDeck[c.name][c.orientation].text}`).join("<br>");
     document.getElementById("summary").innerHTML = `<h3>📝 리딩 요약</h3><p>${summary}</p><p>${interp}</p>`;
   }
