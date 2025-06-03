@@ -75,129 +75,74 @@
   <div id="bonusMessage"></div>
   <div id="summary"></div>
 
-  <script>
-    const tarotDeck = {
-      "The Fool": { upright: { score: 3 }, reversed: { score: -2 } },
-      "The Magician": { upright: { score: 2 }, reversed: { score: -1 } },
-      "The High Priestess": { upright: { score: 2 }, reversed: { score: -1 } },
-      "The Empress": { upright: { score: 3 }, reversed: { score: -2 } },
-      "The Emperor": { upright: { score: 2 }, reversed: { score: -1 } },
-      "The Hierophant": { upright: { score: 1 }, reversed: { score: -1 } },
-      "The Lovers": { upright: { score: 3 }, reversed: { score: -2 } },
-      "The Chariot": { upright: { score: 2 }, reversed: { score: -1 } },
-      "Strength": { upright: { score: 2 }, reversed: { score: -2 } },
-      "The Hermit": { upright: { score: 1 }, reversed: { score: -1 } },
-      "Wheel of Fortune": { upright: { score: 4 }, reversed: { score: -2 } },
-      "Justice": { upright: { score: 2 }, reversed: { score: -1 } },
-      "The Hanged Man": { upright: { score: 1 }, reversed: { score: -2 } },
-      "Death": { upright: { score: 2 }, reversed: { score: -2 } },
-      "Temperance": { upright: { score: 2 }, reversed: { score: -1 } },
-      "The Devil": { upright: { score: -2 }, reversed: { score: 1 } },
-      "The Tower": { upright: { score: -3 }, reversed: { score: -1 } },
-      "The Star": { upright: { score: 3 }, reversed: { score: 1 } },
-      "The Moon": { upright: { score: -1 }, reversed: { score: -2 } },
-      "The Sun": { upright: { score: 4 }, reversed: { score: 1 } },
-      "Judgement": { upright: { score: 3 }, reversed: { score: 0 } },
-      "The World": { upright: { score: 5 }, reversed: { score: 1 } },
-    };
+ <script>
+  const tarotDeck = {
+    "바보": { emoji: "🤪", upright: { score: 3, text: "모험, 무지" }, reversed: { score: 1, text: "경솔, 어리석음" } },
+    "마법사": { emoji: "🧙‍♂️", upright: { score: 4, text: "창조, 수완" }, reversed: { score: 2, text: "겁많음, 기만" } },
+    "여교황": { emoji: "📚", upright: { score: 3, text: "지식, 총명" }, reversed: { score: 1, text: "잔혹, 무례함" } },
+    "여제": { emoji: "👸", upright: { score: 4, text: "풍양, 모성" }, reversed: { score: 2, text: "과잉, 허영" } },
+    "황제": { emoji: "🤴", upright: { score: 4, text: "책임, 부성" }, reversed: { score: 2, text: "오만, 존대" } },
+    "교황": { emoji: "🙏", upright: { score: 3, text: "가르침, 관대함" }, reversed: { score: 1, text: "협량, 나태" } },
+    "연인": { emoji: "💑", upright: { score: 4, text: "연애, 쾌락" }, reversed: { score: 2, text: "질투, 배신" } },
+    "전차": { emoji: "🚗", upright: { score: 4, text: "전진, 승리" }, reversed: { score: 2, text: "폭주, 좌절" } },
+    "힘": { emoji: "💪", upright: { score: 3, text: "힘, 용기" }, reversed: { score: 1, text: "자만, 본성" } },
+    "은둔자": { emoji: "🕯️", upright: { score: 3, text: "탐색, 사려깊음" }, reversed: { score: 1, text: "폐쇄, 음습" } },
+    "운명의 수레바퀴": { emoji: "🎡", upright: { score: 4, text: "기회, 행운" }, reversed: { score: 1, text: "불운, 오산" } },
+    "정의": { emoji: "⚖️", upright: { score: 3, text: "균형, 정당함" }, reversed: { score: 1, text: "편견, 불균형" } },
+    "매달린 사람": { emoji: "🪢", upright: { score: 3, text: "희생, 인내" }, reversed: { score: 1, text: "무의미한 희생" } },
+    "죽음": { emoji: "💀", upright: { score: 2, text: "격변, 이별" }, reversed: { score: 2, text: "고착, 변화 유보" } },
+    "절제": { emoji: "🥛", upright: { score: 3, text: "조화, 견실" }, reversed: { score: 1, text: "낭비, 불안정" } },
+    "악마": { emoji: "😈", upright: { score: 2, text: "사심, 타락" }, reversed: { score: 2, text: "각성, 단절" } },
+    "탑": { emoji: "🗼", upright: { score: 1, text: "파괴, 충격" }, reversed: { score: 2, text: "필요한 파괴" } },
+    "별": { emoji: "🌟", upright: { score: 4, text: "희망, 동경" }, reversed: { score: 2, text: "환멸, 비애" } },
+    "달": { emoji: "🌙", upright: { score: 2, text: "불안, 혼돈" }, reversed: { score: 3, text: "불안 해소, 명료함" } },
+    "태양": { emoji: "🌞", upright: { score: 5, text: "만족, 미래" }, reversed: { score: 3, text: "지연, 실패" } },
+    "심판": { emoji: "📯", upright: { score: 4, text: "부활, 개선" }, reversed: { score: 2, text: "후회, 불능" } },
+    "세계": { emoji: "🌍", upright: { score: 5, text: "완성, 완전" }, reversed: { score: 3, text: "미완성, 어중간함" } }
+  };
 
-    const bonusCombinations = [
-      { cards: ["The Sun", "The World", "The Star"], condition: "upright", bonusMessage: "🌟 우주가 당신을 돕고 있습니다! 최고의 조합이에요!" },
-      { cards: ["The Tower", "Death", "The Devil"], condition: "reversed", bonusMessage: "😈 위기를 기회로! 극복의 조합입니다." },
-      { cards: ["The Fool", "The Magician", "The High Priestess"], condition: "upright", bonusMessage: "🔮 새로운 시작을 향한 완벽한 흐름!" }
-    ];
+  let drawnCards = [];
+  let phase = 0;
 
-    let drawnCards = [];
-    let phase = 0;
+  function drawCard() {
+    const names = Object.keys(tarotDeck);
+    let name;
+    do {
+      name = names[Math.floor(Math.random() * names.length)];
+    } while (drawnCards.find(c => c.name === name));
 
-    function drawCard() {
-      const names = Object.keys(tarotDeck);
-      let card;
-      do {
-        card = names[Math.floor(Math.random() * names.length)];
-      } while (drawnCards.some(c => c.name === card));
-      const orientation = Math.random() < 0.5 ? "upright" : "reversed";
-      drawnCards.push({ name: card, orientation: orientation });
-      const cardText = orientation === "upright" ? `${card}` : `${card} (역방향)`;
-      const resultArea = document.getElementById("resultArea");
-      resultArea.innerHTML += `<div class="card">🃏 ${["과거", "현재", "미래"][phase]}: <strong>${cardText}</strong></div>`;
-      phase++;
+    const orientation = Math.random() > 0.5 ? "upright" : "reversed";
+    drawnCards.push({ name, orientation });
 
-      if (phase === 3) {
-        document.querySelector("button[onclick='drawCard()']").disabled = true;
-        evaluateBonus();
-        summarizeReading();
-      }
+    const arrow = orientation === "upright" ? "⬆️" : "⬇️";
+    const card = tarotDeck[name];
+    const display = `${card.emoji} ${name} ${arrow}<br><small>${card[orientation].text}</small>`;
+
+    const result = document.createElement("div");
+    result.className = "card";
+    result.innerHTML = display;
+    document.getElementById("resultArea").appendChild(result);
+
+    phase++;
+    if (phase === 3) {
+      document.querySelector("button[onclick='drawCard()']").disabled = true;
+      evaluateBonus();
+      summarizeReading();
     }
+  }
 
-    function evaluateBonus() {
-      const names = drawnCards.map(c => c.name);
-      const orientations = drawnCards.map(c => c.orientation);
-      const bonusDiv = document.getElementById("bonusMessage");
+  function evaluateBonus() {
+    const bonus = drawnCards.every(c => c.orientation === "upright") ? "🔥 오늘은 강한 운의 흐름!" : "";
+    document.getElementById("bonusMessage").textContent = bonus;
+  }
 
-      for (const combo of bonusCombinations) {
-        const isMatch = combo.cards.every(c => names.includes(c));
-        const allSameOrientation = combo.cards.every(c => {
-          const idx = names.indexOf(c);
-          return orientations[idx] === combo.condition;
-        });
-        if (isMatch && allSameOrientation) {
-          bonusDiv.innerHTML = `<p><strong>${combo.bonusMessage}</strong></p>`;
-          break;
-        }
-      }
-    }
-
-    function summarizeReading() {
-      const totalScore = drawnCards.reduce((sum, c) => sum + tarotDeck[c.name][c.orientation].score, 0);
-      let message;
-
-      if (totalScore >= 13) message = "🌈 신의 가호가 함께하는 날이에요! 기회가 왔어요 💫";
-      else if (totalScore >= 10) message = "🔥 아주 좋은 흐름이에요! 원하는 걸 확실히 잡아보세요!";
-      else if (totalScore >= 7) message = "😄 순조롭고 무난한 하루! 편안하게 보내세요.";
-      else if (totalScore >= 4) message = "🙂 약간 애매하지만 크게 나쁘지 않아요.";
-      else if (totalScore >= 1) message = "😐 조심하면 무난할 수도 있어요.";
-      else if (totalScore >= -2) message = "⚠️ 신중하게! 오늘은 살짝 불안정한 기운이 보여요.";
-      else message = "🚨 긴장하세요! 오늘은 완전 운빨 지옥입니다...";
-
-      let percentile;
-      if (totalScore >= 15) percentile = "상위 0.1%";
-      else if (totalScore === 14) percentile = "상위 0.5%";
-      else if (totalScore === 13) percentile = "상위 1%";
-      else if (totalScore === 12) percentile = "상위 2%";
-      else if (totalScore === 11) percentile = "상위 4%";
-      else if (totalScore === 10) percentile = "상위 7%";
-      else if (totalScore === 9) percentile = "상위 10%";
-      else if (totalScore === 8) percentile = "상위 15%";
-      else if (totalScore === 7) percentile = "상위 20%";
-      else if (totalScore === 6) percentile = "상위 30%";
-      else if (totalScore === 5) percentile = "상위 40%";
-      else if (totalScore >= 3) percentile = "상위 55%";
-      else if (totalScore >= 1) percentile = "상위 70%";
-      else if (totalScore >= -2) percentile = "상위 85%";
-      else percentile = "상위 99%";
-
-      const summary = document.getElementById("summary");
-      summary.innerHTML = `
-        <h3>📌 종합 운세: ${totalScore}점</h3>
-        <p>${message}</p>
-        <p>📊 <strong>${percentile} 운세</strong>입니다.</p>
-      `;
-    }
-
-    function shareResult() {
-      const shareText = "🔮 오늘의 운빨배틀타로 결과 확인해보세요!\n👉 https://jeffersonwattson.github.io/tarot-ai/";
-      if (navigator.share) {
-        navigator.share({
-          title: "운빨배틀타로 - 세컨머니 AI",
-          text: shareText,
-          url: window.location.href
-        });
-      } else {
-        alert("공유 기능은 모바일에서만 지원됩니다!");
-      }
-    }
-  </script>
+  function summarizeReading() {
+    const total = drawnCards.reduce((sum, c) => sum + tarotDeck[c.name][c.orientation].score, 0);
+    const summary = `총점: ${total}점 / 최고점: 15점`;
+    const interp = drawnCards.map(c => `${tarotDeck[c.name].emoji} ${c.name}: ${tarotDeck[c.name][c.orientation].text}`).join("<br>");
+    document.getElementById("summary").innerHTML = `<h3>📝 리딩 요약</h3><p>${summary}</p><p>${interp}</p>`;
+  }
+</script>
   <!-- ✅ 쿠팡 광고 위치 -->
 <script src="https://ads-partners.coupang.com/g.js"></script>
 <script type="text/javascript">
