@@ -95,9 +95,9 @@ const tarotDeck = {
 </p>
 
  <div id="buttonArea">
-  <button id="btn1" onclick="drawCard(1)">1번 카드 뽑기</button>
-  <button id="btn2" onclick="drawCard(2)" disabled>2번 카드 뽑기</button>
-  <button id="btn3" onclick="drawCard(3)" disabled>3번 카드 뽑기</button>
+  <button id="btnA" onclick="chooseCard('A')">A</button>
+  <button id="btnB" onclick="chooseCard('B')">B</button>
+  <button id="btnC" onclick="chooseCard('C')">C</button>
 </div>
   <button onclick="location.reload()">다시하기</button>
   <button onclick="shareResult()">공유하기</button>
@@ -106,54 +106,77 @@ const tarotDeck = {
   <div id="bonusMessage"></div>
   <div id="summary"></div>
 
- <script>
-const drawnCards = [];
-
-function drawCard(order) {
+<script>
+let deck = [];
+let selectedCard = null;
+let revealed = false;
+function prepareDeck() {
   const names = Object.keys(tarotDeck);
-  let name;
-  do {
-    name = names[Math.floor(Math.random() * names.length)];
-  } while (drawnCards.find(c => c.name === name));
+  const drawn = new Set();
+  while (deck.length < 3) {
+    const name = names[Math.floor(Math.random() * names.length)];
+    if (!drawn.has(name)) {
+      const orientation = Math.random() > 0.5 ? "up" : "down";
+      deck.push({ name, orientation });
+      drawn.add(name);
+    }
+  }
+  document.getElementById("buttonArea").style.display = "block";
+}
 
-  const orientation = Math.random() > 0.5 ? "up" : "down";
-  drawnCards.push({ name, orientation });
+function chooseCard(choice) {
+  if (revealed) return;
+  revealed = true;
+  const idx = { A: 0, B: 1, C: 2 }[choice];
+  selectedCard = deck[idx];
 
-  const arrow = orientation === "up" ? "⬆️" : "⬇️";
-  const emoji = tarotDeck[name][orientation].emoji;
-  const display = `${emoji} ${name} ${arrow}`;
+  const arrow = selectedCard.orientation === "up" ? "⬆️" : "⬇️";
+  const emoji = tarotDeck[selectedCard.name][selectedCard.orientation].emoji;
+  const score = tarotDeck[selectedCard.name][selectedCard.orientation].score;
 
-  const result = document.createElement("div");
-  result.className = "card";
-  result.innerHTML = `<strong>${order}번 카드:</strong> ${display}`;
-  document.getElementById("resultArea").appendChild(result);
+  document.getElementById("resultArea").innerHTML = `
+    <div class="card">
+      <strong>${choice} 선택:</strong> ${emoji} ${selectedCard.name} ${arrow}<br>
+      점수: ${score}점
+    </div>
+  `;
 
-  if (order === 1) {
-    document.getElementById("btn1").disabled = true;
-    document.getElementById("btn2").disabled = false;
-  } else if (order === 2) {
-    document.getElementById("btn2").disabled = true;
-    document.getElementById("btn3").disabled = false;
-  } else if (order === 3) {
-    document.getElementById("btn3").disabled = true;
-    evaluateBonus();
-    summarizeReading();
+  document.getElementById("summary").innerHTML = `
+    <h3>📝 리딩 요약</h3>
+    <p>${emoji} ${selectedCard.name} (${selectedCard.orientation === "up" ? "정방향" : "역방향"}) - ${score}점</p>
+  `;
+
+  document.getElementById("buttonArea").style.display = "none";
+}
+
+function shareResult() {
+  if (!selectedCard) {
+    alert("카드를 먼저 선택해 주세요!");
+    return;
+  }
+
+  const arrow = selectedCard.orientation === "up" ? "⬆️" : "⬇️";
+  const emoji = tarotDeck[selectedCard.name][selectedCard.orientation].emoji;
+  const score = tarotDeck[selectedCard.name][selectedCard.orientation].score;
+  const direction = selectedCard.orientation === "up" ? "정방향" : "역방향";
+
+  const shareText = `🔮 나의 운빨배틀타로 결과!\n${emoji} ${selectedCard.name} ${arrow} (${direction})\n점수: ${score}점\n👉 당신의 운도 확인해보세요!\nhttps://jeffersonwattson.github.io/tarot-ai/`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: "운빨배틀타로 - 세컨머니 AI",
+      text: shareText,
+      url: window.location.href
+    });
+  } else {
+    navigator.clipboard.writeText(shareText).then(() => {
+      alert("결과가 클립보드에 복사되었어요! 붙여넣기로 공유해보세요 📋");
+    });
   }
 }
 
-function evaluateBonus() {
-  const bonus = drawnCards.every(c => c.orientation === "up") ? "🔥 오늘은 강한 운의 흐름!" : "";
-  document.getElementById("bonusMessage").textContent = bonus;
-}
+window.onload = prepareDeck;
 
-function summarizeReading() {
-  const total = drawnCards.reduce((sum, c) => sum + tarotDeck[c.name][c.orientation].score, 0);
-  const summary = `총점: ${total}점 / 최고점: 30점`;
-  const interp = drawnCards.map((c, i) =>
-    `${i + 1}번 ${tarotDeck[c.name][c.orientation].emoji} ${c.name} (${c.orientation === "up" ? "정방향" : "역방향"})`
-  ).join("<br>");
-  document.getElementById("summary").innerHTML = `<h3>📝 리딩 요약</h3><p>${summary}</p><p>${interp}</p>`;
-}
 </script>
   <!-- ✅ 쿠팡 광고 위치 -->
 <script src="https://ads-partners.coupang.com/g.js"></script>
