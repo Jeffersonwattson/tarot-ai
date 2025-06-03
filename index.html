@@ -3,177 +3,169 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>세컨머니 AI 타로</title>
+  <title>운빨배틀타로 - 세컨머니 AI</title>
   <style>
- <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #fdfaf5;
-    color: #333;
-    text-align: center;
-    padding: 2rem;
-  }
-  .card {
-    font-size: 1.5rem;
-    margin: 1rem;
-    line-height: 1.6;
-  }
-  @media screen and (max-width: 600px) {
-    .card {
-      font-size: 1.1rem;
+    body {
+      font-family: Arial, sans-serif;
+      background: #fdfaf5;
+      color: #333;
+      text-align: center;
+      padding: 2rem;
     }
-  }
-  #resultArea, #bonusMessage, #summary, #visitorCount {
-    margin-top: 1.5rem;
-  }
-  button {
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    margin: 1rem;
-    cursor: pointer;
-  }
-  a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #0077cc;
-  }
-</style>
+    .card {
+      font-size: 2rem;
+      margin: 1rem;
+    }
+    #resultArea, #bonusMessage, #summary, #visitorCount {
+      margin-top: 1.5rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+      margin: 1rem;
+      cursor: pointer;
+    }
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #0077cc;
+    }
+  </style>
 </head>
 <body>
-  <h1>🔮 세컨머니 AI 타로</h1>
+  <h1>🔮 운빨배틀타로</h1>
+  <p>오늘의 운을 세 장의 타로카드로 확인해보세요!</p>
 
-  <div>
-    <a href="https://blog.naver.com/greenfrog232" target="_blank">
-      🔗 세컨머니 실험실 블로그 바로가기
-    </a>
-  </div>
-
-  <div>
-    <button onclick="drawCard()">카드 뽑기</button>
-    <button onclick="shareResult()">🔗 공유하기</button>
-  </div>
+  <button onclick="drawCard()">카드 뽑기</button>
+  <button onclick="location.reload()">다시하기</button>
+  <button onclick="shareResult()">공유하기</button>
 
   <div id="resultArea"></div>
   <div id="bonusMessage"></div>
   <div id="summary"></div>
-  <!-- ✅ 쿠팡 파트너스 광고 시작 -->
-<div style="margin-top: 30px; text-align: center;">
-  <script src="https://ads-partners.coupang.com/g.js"></script>
-  <script type="text/javascript">
-    new PartnersCoupang.G({
-      "id": 577509,
-      "template": "carousel",
-      "trackingCode": "AF7035269",
-      "width": "100%",
-      "height": "150",
-      "subParam": "21445789db"
-    });
-  </script>
-</div>
-<!-- ✅ 쿠팡 파트너스 광고 끝 -->
 
-  <div id="visitorCount"></div>
-
-  <!-- 여기에 <script> ... </script> 코드를 따로 붙이면 완성 -->
-   <script>
-const tarotDeck = {
-  "바보": { emoji: "🃏", 정방향: { score: 3, message: "새로운 시작이에요! 뭐든지 해볼 수 있는 시기예요 💫", char: "재퍼슨" }, 역방향: { score: -3, message: "생각 없이 질렀지? 이제 후회할 일만 남았다.", char: "왓슨" } },
-  "마법사": { emoji: "✨", 정방향: { score: 4, message: "잠재력이 활짝 열리는 시점이에요 ✨ 믿고 해보세용!", char: "재퍼슨" }, 역방향: { score: -3, message: "허세 부리다 자빠진다. 실력도 안 되면서 과신하지 마.", char: "왓슨" } },
-  "여교황": { emoji: "👁", 정방향: { score: 3, message: "조용히 마음을 들여다보면 답이 보여요 🍃", char: "재퍼슨" }, 역방향: { score: -2, message: "맨날 고민만 하다 시간 다 간다. 결단력 좀 키워.", char: "왓슨" } },
-  "여제": { emoji: "👑", 정방향: { score: 4, message: "풍요로운 시기! 돌봄과 성장의 에너지가 넘쳐나요 🌷", char: "재퍼슨" }, 역방향: { score: -2, message: "너무 감정적으로 흐르고 있어요. 차분함을 찾아봐요.", char: "왓슨" } },
-  "황제": { emoji: "🛡", 정방향: { score: 3.5, message: "질서와 구조! 리더십을 발휘할 타이밍이에요 💼", char: "재퍼슨" }, 역방향: { score: -2, message: "고집이 세지진 않았나요? 유연함이 필요한 시점입니다.", char: "왓슨" } },
-  "연인": { emoji: "💞", 정방향: { score: 4, message: "사랑이 피어나고 있어요 💖 중요한 선택의 순간이에요!", char: "재퍼슨" }, 역방향: { score: -4, message: "감정에 휘둘려서 판단력 바닥임. 그냥 막 들이댔다가 다 잃는다.", char: "왓슨" } },
-  "전차": { emoji: "🚗", 정방향: { score: 4, message: "힘 있게 밀고 나가세요! 승리의 기운이 있어요 🏁", char: "재퍼슨" }, 역방향: { score: -3, message: "조급함은 패배의 지름길! 천천히 가도 괜찮아요.", char: "왓슨" } },
-  "힘": { emoji: "🦁", 정방향: { score: 4, message: "내면의 힘으로 이겨낼 수 있어요 💪 오늘은 부드러운 리더십!", char: "재퍼슨" }, 역방향: { score: -2, message: "감정 조절 실패... 욱하지 말고 한 템포 쉬어가요.", char: "왓슨" } },
-  "은둔자": { emoji: "🕯", 정방향: { score: 3, message: "혼자만의 시간이 필요할 때예요. 마음 정리해보세요 🌌", char: "재퍼슨" }, 역방향: { score: -2, message: "너무 고립되어 있지는 않나요? 손 내밀어봐요.", char: "왓슨" } },
-  "운명의 수레바퀴": { emoji: "🎡", 정방향: { score: 4, message: "운명이 움직이기 시작했어요! 변화의 시기예요 🔄", char: "재퍼슨" }, 역방향: { score: -3, message: "운에만 맡기면 안 돼요. 스스로 방향을 틀어야 해요.", char: "왓슨" } },
-  "정의": { emoji: "⚖", 정방향: { score: 3, message: "균형과 공정함이 중요한 하루예요! 정직하게 임해보세요", char: "재퍼슨" }, 역방향: { score: -3, message: "불공정한 상황, 잘못된 판단에 주의하세요.", char: "왓슨" } },
-  "매달린 사람": { emoji: "🙃", 정방향: { score: 2, message: "잠시 멈춰서 보는 것도 답이에요 🧘‍♂️", char: "재퍼슨" }, 역방향: { score: -3, message: "계속 기다리기만 하면 기회 놓쳐요! 움직일 때입니다.", char: "왓슨" } },
-  "죽음": { emoji: "💀", 정방향: { score: 3, message: "끝은 새로운 시작의 출발점이에요 🌱", char: "재퍼슨" }, 역방향: { score: -3, message: "변화를 거부하면 더 아파져요. 놓아줄 건 놓아줘야 해요.", char: "왓슨" } },
-  "절제": { emoji: "🌈", 정방향: { score: 3, message: "균형 있는 하루가 될 거예요. 여유를 가지세요 🌤", char: "재퍼슨" }, 역방향: { score: -2, message: "과유불급! 뭐든 지나치면 탈나요.", char: "왓슨" } },
-  "악마": { emoji: "😈", 정방향: { score: 1, message: "너무 얽매이지 마세요 😈 집착을 내려놓을 때예요!", char: "재퍼슨" }, 역방향: { score: -5, message: "중독, 탐욕, 집착… 솔직히 너 지금 헤어나올 생각도 없지?", char: "왓슨" } },
-  "탑": { emoji: "🗼", 정방향: { score: -1, message: "혼란이 있을 수 있어요. 그러나 무너진 뒤엔 다시 세워야죠!", char: "재퍼슨" }, 역방향: { score: -4, message: "예고 없는 폭풍! 정신 바짝 차리세요.", char: "왓슨" } },
-  "별": { emoji: "⭐", 정방향: { score: 4, message: "희망이 보이기 시작했어요! 소망이 이루어질 수 있어요 🌟", char: "재퍼슨" }, 역방향: { score: -1, message: "기대가 크면 실망도 커요. 현실을 잘 바라보세요.", char: "왓슨" } },
-  "달": { emoji: "🌙", 정방향: { score: 2, message: "감성적인 하루가 될 거예요. 감정기복은 조심!", char: "재퍼슨" }, 역방향: { score: -3, message: "혼란과 오해의 기운… 명확하게 말하고 행동하세요.", char: "왓슨" } },
-  "태양": { emoji: "🌞", 정방향: { score: 5, message: "모든 게 밝아져요! 좋은 소식이 다가오고 있어요 🌞", char: "재퍼슨" }, 역방향: { score: -1, message: "웃고 있지만 가식이다. 무리하게 밝은 척 하지 마.", char: "왓슨" } },
-  "심판": { emoji: "📣", 정방향: { score: 3, message: "결정적인 순간이 다가오고 있어요. 과거를 돌아보고 나아가요 📢", char: "재퍼슨" }, 역방향: { score: -3, message: "후회, 미련, 미완… 이젠 결단이 필요해요.", char: "왓슨" } },
-  "세계": { emoji: "🌍", 정방향: { score: 5, message: "마침내 완성! 노력한 만큼 보상을 받을 거예요 🏆", char: "재퍼슨" }, 역방향: { score: -2, message: "뭔가 아쉬운 마무리. 유종의 미를 위해 마지막까지 집중!", char: "왓슨" } }
-};
-
-const bonusCombinations = [
-  { cards: ["태양", "별", "세계"], condition: "정방향", bonusMessage: "✨ 운수대통! 복권 사러 가볼까요? 오늘은 찐으로 됩니다 (레어) 🌈💸🍀" },
-  { cards: ["마법사", "전차", "힘"], condition: "정방향", bonusMessage: "🔥 오늘은 추진력 만렙! 원하는 거 있으면 들이대세요 (레어) 🏁🚀🎯" },
-  { cards: ["연인", "여제", "황제"], condition: "정방향", bonusMessage: "💞 사랑도 일도 술술 풀릴 운세 (레어) 💌👑📈" },
-  { cards: ["죽음", "심판", "운명의 수레바퀴"], condition: "정방향", bonusMessage: "🌪️ 인생 터닝포인트! 이직, 이사, 이별 고민 중이라면 지금이 기회입니다 (레어) 🔄🌀🌟" },
-  { cards: ["악마", "탑", "달"], condition: "역방향", bonusMessage: "⚠️ 오늘은 조심 또 조심. 이 조합은 정말 흔치 않아요. 진짜로 멘탈관리 잘해야 합니다 (레어) 🧨🧠☔" }
-];
-
-// 아래 drawCard 등 기능은 기존 코드에 추가로 붙이시면 됩니다.
-  </script>
   <script>
-let drawnCards = [];
-let phase = 0;
+    const tarotDeck = {
+      "The Fool": { upright: { score: 3 }, reversed: { score: -2 } },
+      "The Magician": { upright: { score: 2 }, reversed: { score: -1 } },
+      "The High Priestess": { upright: { score: 2 }, reversed: { score: -1 } },
+      "The Empress": { upright: { score: 3 }, reversed: { score: -2 } },
+      "The Emperor": { upright: { score: 2 }, reversed: { score: -1 } },
+      "The Hierophant": { upright: { score: 1 }, reversed: { score: -1 } },
+      "The Lovers": { upright: { score: 3 }, reversed: { score: -2 } },
+      "The Chariot": { upright: { score: 2 }, reversed: { score: -1 } },
+      "Strength": { upright: { score: 2 }, reversed: { score: -2 } },
+      "The Hermit": { upright: { score: 1 }, reversed: { score: -1 } },
+      "Wheel of Fortune": { upright: { score: 4 }, reversed: { score: -2 } },
+      "Justice": { upright: { score: 2 }, reversed: { score: -1 } },
+      "The Hanged Man": { upright: { score: 1 }, reversed: { score: -2 } },
+      "Death": { upright: { score: 2 }, reversed: { score: -2 } },
+      "Temperance": { upright: { score: 2 }, reversed: { score: -1 } },
+      "The Devil": { upright: { score: -2 }, reversed: { score: 1 } },
+      "The Tower": { upright: { score: -3 }, reversed: { score: -1 } },
+      "The Star": { upright: { score: 3 }, reversed: { score: 1 } },
+      "The Moon": { upright: { score: -1 }, reversed: { score: -2 } },
+      "The Sun": { upright: { score: 4 }, reversed: { score: 1 } },
+      "Judgement": { upright: { score: 3 }, reversed: { score: 0 } },
+      "The World": { upright: { score: 5 }, reversed: { score: 1 } },
+    };
 
-function drawCard() {
-  const cardNames = Object.keys(tarotDeck);
-  let card;
-  do {
-    card = cardNames[Math.floor(Math.random() * cardNames.length)];
-  } while (drawnCards.some(c => c.name === card));
+    const bonusCombinations = [
+      { cards: ["The Sun", "The World", "The Star"], condition: "upright", bonusMessage: "🌟 우주가 당신을 돕고 있습니다! 최고의 조합이에요!" },
+      { cards: ["The Tower", "Death", "The Devil"], condition: "reversed", bonusMessage: "😈 위기를 기회로! 극복의 조합입니다." },
+      { cards: ["The Fool", "The Magician", "The High Priestess"], condition: "upright", bonusMessage: "🔮 새로운 시작을 향한 완벽한 흐름!" }
+    ];
 
-  const isReversed = Math.random() < 0.5 ? '정방향' : '역방향';
-  const cardInfo = tarotDeck[card][isReversed];
-  drawnCards.push({ name: card, orientation: isReversed });
+    let drawnCards = [];
+    let phase = 0;
 
-  const phaseName = ["과거", "현재", "미래"][phase];
-  const resultArea = document.getElementById("resultArea");
-  resultArea.innerHTML += `
-    <div class="card">${phaseName}: ${tarotDeck[card].emoji} <strong>${card} (${isReversed})</strong><br>
-    ${cardInfo.message} - <em>${cardInfo.char}</em></div>
-  `;
+    function drawCard() {
+      const names = Object.keys(tarotDeck);
+      let card;
+      do {
+        card = names[Math.floor(Math.random() * names.length)];
+      } while (drawnCards.some(c => c.name === card));
+      const orientation = Math.random() < 0.5 ? "upright" : "reversed";
+      drawnCards.push({ name: card, orientation: orientation });
+      const cardText = orientation === "upright" ? `${card}` : `${card} (역방향)`;
+      const resultArea = document.getElementById("resultArea");
+      resultArea.innerHTML += `<div class="card">🃏 ${["과거", "현재", "미래"][phase]}: <strong>${cardText}</strong></div>`;
+      phase++;
 
-  phase++;
-  if (phase === 3) {
-    document.querySelector("button[onclick='drawCard()']").disabled = true;
-    evaluateBonus();
-function summarizeReading() {
-  const totalScore = drawnCards.reduce((sum, c) => sum + tarotDeck[c.name][c.orientation].score, 0);
-  let message;
-  if (totalScore >= 13) message = "🌈 신의 가호가 함께하는 날이에요! 기회가 왔어요 💫";
-  else if (totalScore >= 10) message = "🔥 아주 좋은 흐름이에요! 원하는 걸 확실히 잡아보세요!";
-  else if (totalScore >= 7) message = "😄 순조롭고 무난한 하루! 편안하게 보내세요.";
-  else if (totalScore >= 4) message = "🙂 약간 애매하지만 크게 나쁘지 않아요.";
-  else if (totalScore >= 1) message = "😐 조심하면 무난할 수도 있어요.";
-  else if (totalScore >= -2) message = "⚠️ 신중하게! 오늘은 살짝 불안정한 기운이 보여요.";
-  else message = "🚨 긴장하세요! 오늘은 완전 운빨 지옥입니다...";
+      if (phase === 3) {
+        document.querySelector("button[onclick='drawCard()']").disabled = true;
+        evaluateBonus();
+        summarizeReading();
+      }
+    }
 
-  // 상위 % 계산 (세분화)
-  let percentile;
-  if (totalScore >= 15) percentile = "상위 0.1%";
-  else if (totalScore === 14) percentile = "상위 0.5%";
-  else if (totalScore === 13) percentile = "상위 1%";
-  else if (totalScore === 12) percentile = "상위 2%";
-  else if (totalScore === 11) percentile = "상위 4%";
-  else if (totalScore === 10) percentile = "상위 7%";
-  else if (totalScore === 9) percentile = "상위 10%";
-  else if (totalScore === 8) percentile = "상위 15%";
-  else if (totalScore === 7) percentile = "상위 20%";
-  else if (totalScore === 6) percentile = "상위 30%";
-  else if (totalScore === 5) percentile = "상위 40%";
-  else if (totalScore >= 3) percentile = "상위 55%";
-  else if (totalScore >= 1) percentile = "상위 70%";
-  else if (totalScore >= -2) percentile = "상위 85%";
-  else percentile = "상위 99%";
+    function evaluateBonus() {
+      const names = drawnCards.map(c => c.name);
+      const orientations = drawnCards.map(c => c.orientation);
+      const bonusDiv = document.getElementById("bonusMessage");
 
-  const summary = document.getElementById("summary");
-  summary.innerHTML = `
-    <h3>📌 종합 운세: ${totalScore}점</h3>
-    <p>${message}</p>
-    <p>📊 <strong>${percentile} 운세</strong>입니다.</p>
-  `;
-}
-</script>
+      for (const combo of bonusCombinations) {
+        const isMatch = combo.cards.every(c => names.includes(c));
+        const allSameOrientation = combo.cards.every(c => {
+          const idx = names.indexOf(c);
+          return orientations[idx] === combo.condition;
+        });
+        if (isMatch && allSameOrientation) {
+          bonusDiv.innerHTML = `<p><strong>${combo.bonusMessage}</strong></p>`;
+          break;
+        }
+      }
+    }
 
-  
+    function summarizeReading() {
+      const totalScore = drawnCards.reduce((sum, c) => sum + tarotDeck[c.name][c.orientation].score, 0);
+      let message;
+
+      if (totalScore >= 13) message = "🌈 신의 가호가 함께하는 날이에요! 기회가 왔어요 💫";
+      else if (totalScore >= 10) message = "🔥 아주 좋은 흐름이에요! 원하는 걸 확실히 잡아보세요!";
+      else if (totalScore >= 7) message = "😄 순조롭고 무난한 하루! 편안하게 보내세요.";
+      else if (totalScore >= 4) message = "🙂 약간 애매하지만 크게 나쁘지 않아요.";
+      else if (totalScore >= 1) message = "😐 조심하면 무난할 수도 있어요.";
+      else if (totalScore >= -2) message = "⚠️ 신중하게! 오늘은 살짝 불안정한 기운이 보여요.";
+      else message = "🚨 긴장하세요! 오늘은 완전 운빨 지옥입니다...";
+
+      let percentile;
+      if (totalScore >= 15) percentile = "상위 0.1%";
+      else if (totalScore === 14) percentile = "상위 0.5%";
+      else if (totalScore === 13) percentile = "상위 1%";
+      else if (totalScore === 12) percentile = "상위 2%";
+      else if (totalScore === 11) percentile = "상위 4%";
+      else if (totalScore === 10) percentile = "상위 7%";
+      else if (totalScore === 9) percentile = "상위 10%";
+      else if (totalScore === 8) percentile = "상위 15%";
+      else if (totalScore === 7) percentile = "상위 20%";
+      else if (totalScore === 6) percentile = "상위 30%";
+      else if (totalScore === 5) percentile = "상위 40%";
+      else if (totalScore >= 3) percentile = "상위 55%";
+      else if (totalScore >= 1) percentile = "상위 70%";
+      else if (totalScore >= -2) percentile = "상위 85%";
+      else percentile = "상위 99%";
+
+      const summary = document.getElementById("summary");
+      summary.innerHTML = `
+        <h3>📌 종합 운세: ${totalScore}점</h3>
+        <p>${message}</p>
+        <p>📊 <strong>${percentile} 운세</strong>입니다.</p>
+      `;
+    }
+
+    function shareResult() {
+      const shareText = "🔮 오늘의 운빨배틀타로 결과 확인해보세요!\n👉 https://jeffersonwattson.github.io/tarot-ai/";
+      if (navigator.share) {
+        navigator.share({
+          title: "운빨배틀타로 - 세컨머니 AI",
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        alert("공유 기능은 모바일에서만 지원됩니다!");
+      }
+    }
+  </script>
 </body>
 </html>
