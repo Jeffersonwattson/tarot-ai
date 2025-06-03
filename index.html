@@ -143,11 +143,33 @@ function chooseCard(choice) {
   if (revealed) return;
   revealed = true;
   selectedSet = bundles[choice];
+let upCount = 0;
+let downCount = 0;
+selectedSet.forEach((card) => {
+  if (card.orientation === "up") upCount++;
+  else downCount++;
+});
 
-  const totalScore = selectedSet.reduce(
-    (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
-    0
-  );
+const totalScore = selectedSet.reduce(
+  (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
+  0
+);
+
+
+// 여기! 조합 해석 메시지 생성
+let comboMessage = "";
+if (upCount === 3) {
+  comboMessage = "정방향 3장! 오늘 하루가 당신 편이에요 🎯 운의 흐름이 강하게 따라붙습니다.\n결단력이 필요한 일에서 확신을 가져보세요!";
+} else if (downCount === 3) {
+  comboMessage = "모두 역방향... ⚠️ 예상과 다른 방향으로 흘러갈 수 있어요. 신중하게 움직이세요.\n특히 감정적인 결정은 피하는 게 좋겠어요.";
+} else if (upCount === 2) {
+  comboMessage = "정방향 2장이라 운이 조금씩 트이기 시작했어요 😊 긍정적인 흐름을 놓치지 마세요!\n오늘은 인간관계에서 좋은 소식이 찾아올 수 있어요.";
+} else if (downCount === 2) {
+  comboMessage = "역방향 2장, 오늘은 긴장감 있는 하루가 될 수도 있어요. 방심은 금물!\n작은 일에도 실수가 생길 수 있으니 꼼꼼히 확인하세요.";
+} else {
+  comboMessage = "정역이 반반이에요. 운과 선택의 경계선 위에 서 있어요 ⚖️\n특히 마지막 카드가 힌트가 될 수 있어요. 다시 한 번 들여다보세요.";
+}
+
 
   let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
   selectedSet.forEach((card, i) => {
@@ -162,8 +184,8 @@ function chooseCard(choice) {
     `;
   });
   resultHTML += `<p>총합: <strong>${totalScore}점</strong></p>`;
-
-  document.getElementById("resultArea").innerHTML = resultHTML;
+  resultHTML += `<p><strong>${comboMessage}</strong></p>`; // ✅ 이 줄 추가
+document.getElementById("resultArea").innerHTML = resultHTML;
 
   // B, C 카드 요약
   let summaryHTML = `<h3>📊 다른 선택지 점수 요약</h3>`;
