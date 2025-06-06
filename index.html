@@ -64,166 +64,178 @@
     <button onclick="chooseCard('C')">C</button>
   </div>
   <button onclick="location.reload()">다시하기</button>
-  <button onclick="shareResult()">30점만점</button>
+  <button onclick="shareResult()">공유하기</button>
 
   <div id="resultArea"></div>
   <div id="summary"></div>
 
-  <script>
-    const tarotDeck = {
-      "빡통": { up: { score: 7, emoji: "🤡" }, down: { score: 3, emoji: "🤡" } },
-      "마법사": { up: { score: 8, emoji: "🧙" }, down: { score: 4, emoji: "🧙" } },
-      "여사제": { up: { score: 8, emoji: "👸" }, down: { score: 5, emoji: "👸" } },
-      "여황제": { up: { score: 9, emoji: "👑" }, down: { score: 5, emoji: "👑" } },
-      "황제": { up: { score: 9, emoji: "🦁" }, down: { score: 6, emoji: "🦁" } },
-      "교황": { up: { score: 8, emoji: "🙏" }, down: { score: 5, emoji: "🙏" } },
-      "연인": { up: { score: 10, emoji: "💘" }, down: { score: 4, emoji: "💘" } },
-      "전차": { up: { score: 9, emoji: "🏎️" }, down: { score: 4, emoji: "🏎️" } },
-      "힘,기백": { up: { score: 8, emoji: "💪" }, down: { score: 4, emoji: "💪" } },
-      "은둔자,찐따": { up: { score: 7, emoji: "🧘" }, down: { score: 3, emoji: "🧘" } },
-      "운명의 수레바퀴": { up: { score: 10, emoji: "🎡" }, down: { score: 5, emoji: "🎡" } },
-      "정의": { up: { score: 8, emoji: "⚖️" }, down: { score: 5, emoji: "⚖️" } },
-      "매달린사람": { up: { score: 6, emoji: "🙃" }, down: { score: 2, emoji: "🙃" } },
-      "죽음": { up: { score: 9, emoji: "💀" }, down: { score: 3, emoji: "💀" } },
-      "절제": { up: { score: 8, emoji: "🌈" }, down: { score: 4, emoji: "🌈" } },
-      "악마": { up: { score: 6, emoji: "😈" }, down: { score: 3, emoji: "😈" } },
-      "The Tower": { up: { score: 7, emoji: "🌩️" }, down: { score: 2, emoji: "🌩️" } },
-      "The Star": { up: { score: 10, emoji: "⭐" }, down: { score: 6, emoji: "⭐" } },
-      "The Moon": { up: { score: 7, emoji: "🌙" }, down: { score: 4, emoji: "🌙" } },
-      "The Sun": { up: { score: 10, emoji: "☀️" }, down: { score: 6, emoji: "☀️" } },
-      "심판": { up: { score: 9, emoji: "📣" }, down: { score: 5, emoji: "📣" } },
-      "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } }
-    };
+<script>
+const tarotDeck = {
+  "빡통": { up: { score: 7, emoji: "🤡" }, down: { score: 3, emoji: "🤡" } },
+  "마법사": { up: { score: 8, emoji: "🧙" }, down: { score: 4, emoji: "🧙" } },
+  "여사제": { up: { score: 8, emoji: "👸" }, down: { score: 5, emoji: "👸" } },
+  "여황제": { up: { score: 9, emoji: "👑" }, down: { score: 5, emoji: "👑" } },
+  "황제": { up: { score: 9, emoji: "🦁" }, down: { score: 6, emoji: "🦁" } },
+  "교황": { up: { score: 8, emoji: "🙏" }, down: { score: 5, emoji: "🙏" } },
+  "연인": { up: { score: 10, emoji: "💘" }, down: { score: 4, emoji: "💘" } },
+  "전차": { up: { score: 9, emoji: "🏎️" }, down: { score: 4, emoji: "🏎️" } },
+  "힘,기백": { up: { score: 8, emoji: "💪" }, down: { score: 4, emoji: "💪" } },
+  "은둔자,찐따": { up: { score: 7, emoji: "🧘" }, down: { score: 3, emoji: "🧘" } },
+  "운명의 수레바퀴": { up: { score: 10, emoji: "🎡" }, down: { score: 5, emoji: "🎡" } },
+  "정의": { up: { score: 8, emoji: "⚖️" }, down: { score: 5, emoji: "⚖️" } },
+  "매달린사람": { up: { score: 6, emoji: "🙃" }, down: { score: 2, emoji: "🙃" } },
+  "죽음": { up: { score: 9, emoji: "💀" }, down: { score: 3, emoji: "💀" } },
+  "절제": { up: { score: 8, emoji: "🌈" }, down: { score: 4, emoji: "🌈" } },
+  "악마": { up: { score: 6, emoji: "😈" }, down: { score: 3, emoji: "😈" } },
+  "The Tower": { up: { score: 7, emoji: "🌩️" }, down: { score: 2, emoji: "🌩️" } },
+  "The Star": { up: { score: 10, emoji: "⭐" }, down: { score: 6, emoji: "⭐" } },
+  "The Moon": { up: { score: 7, emoji: "🌙" }, down: { score: 4, emoji: "🌙" } },
+  "The Sun": { up: { score: 10, emoji: "☀️" }, down: { score: 6, emoji: "☀️" } },
+  "심판": { up: { score: 9, emoji: "📣" }, down: { score: 5, emoji: "📣" } },
+  "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } }
+};
 
-    const rareCombos = {
-      "The Sun⬆️-The World⬆️-연인⬆️": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
-      "The Tower⬇️-악마⬇️-죽음⬇️": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
-      "운명의 수레바퀴⬆️-정의⬆️-심판⬆️": "운명과 정의, 그리고 심판! 변화의 중심에 있습니다 ⚖️🌀📣 (레어)",
-      "The Moon⬆️-The Star⬆️-The Sun⬆️": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
-      "매달린사람⬇️-은둔자,찐따⬇️-빡통⬇️": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
-    };
+const rareCombos = {
+  "The Sun⬆️-The World⬆️-연인⬆️": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
+  "The Tower⬇️-악마⬇️-죽음⬇️": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
+  "심판⬆️-운명의 수레바퀴⬆️-정의⬆️": "운명과 정의, 그리고 심판! 변화의 중심에 있습니다 ⚖️🌀📣 (레어)",
+  "The Moon⬆️-The Star⬆️-The Sun⬆️": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
+  "매달린사람⬇️-은둔자,찐따⬇️-빡통⬇️": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
+};
 
-    let bundles = { A: [], B: [], C: [] };
-    let selectedSet = null;
-    let revealed = false;
+let bundles = { A: [], B: [], C: [] };
+let selectedSet = null;
+let revealed = false;
 
-    function drawThreeCards() {
-      const names = Object.keys(tarotDeck);
-      const used = new Set();
-      const result = [];
+function drawThreeCards() {
+  const names = Object.keys(tarotDeck);
+  const used = new Set();
+  const result = [];
 
-      while (result.length < 3) {
-        const name = names[Math.floor(Math.random() * names.length)];
-        if (!used.has(name)) {
-          const orientation = Math.random() > 0.5 ? "up" : "down";
-          result.push({ name, orientation });
-          used.add(name);
-        }
-      }
-
-      return result;
+  while (result.length < 3) {
+    const name = names[Math.floor(Math.random() * names.length)];
+    if (!used.has(name)) {
+      used.add(name);
+      result.push({ name });
     }
+  }
 
-    function prepareDeck() {
-      bundles.A = drawThreeCards();
-      bundles.B = drawThreeCards();
-      bundles.C = drawThreeCards();
-    }
+  const pattern = ["up", "down", "up"]; // 랜덤 정역 비율 필요시 여기에 커스터마이징 가능
+  pattern.sort(() => Math.random() - 0.5);
+  for (let i = 0; i < 3; i++) {
+    result[i].orientation = pattern[i];
+  }
 
-    function chooseCard(choice) {
-      if (revealed) return;
-      revealed = true;
-      selectedSet = bundles[choice];
-      document.querySelectorAll("#buttonArea button").forEach(btn => btn.disabled = true);
+  return result;
+}
+function prepareDeck() {
+  bundles.A = drawThreeCards();
+  bundles.B = drawThreeCards();
+  bundles.C = drawThreeCards();
+}
 
-      let upCount = 0, downCount = 0;
-      const totalScore = selectedSet.reduce((sum, card) => {
-        if (card.orientation === "up") upCount++;
-        else downCount++;
-        return sum + tarotDeck[card.name][card.orientation].score;
-      }, 0);
+function chooseCard(choice) {
+  if (revealed) return;
+  revealed = true;
+  selectedSet = bundles[choice];
+  document.querySelectorAll("#buttonArea button").forEach(btn => btn.disabled = true);
 
-      const currentComboKey = selectedSet
-        .map(c => `${c.name}${c.orientation === "up" ? "⬆️" : "⬇️"}`)
-        .sort()
-        .join("-");
+  let upCount = 0;
+  let downCount = 0;
+  const totalScore = selectedSet.reduce((sum, card) => {
+    if (card.orientation === "up") upCount++;
+    else downCount++;
+    return sum + tarotDeck[card.name][card.orientation].score;
+  }, 0);
 
-      let comboMessage = "";
-      if (rareCombos[currentComboKey]) {
-        comboMessage = rareCombos[currentComboKey];
-      } else {
-        if (upCount === 3) comboMessage = "정방향 3장! 운이 강하게 따라붙습니다 🎯";
-        else if (downCount === 3) comboMessage = "모두 역방향... 예상과 다른 흐름이에요 ⚠️";
-        else if (upCount === 2) comboMessage = "정방향 2장 😊 운이 트이기 시작했어요!";
-        else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요.";
-        else comboMessage = "정역 반반 ⚖️ 오늘의 선택이 결과를 바꿀 수도 있어요.";
-      }
+  const currentComboKey = selectedSet
+    .map(c => `${c.name}${c.orientation === "up" ? "⬆️" : "⬇️"}`)
+    .sort()
+    .join("-");
 
-      let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
-      selectedSet.forEach(card => {
-        const info = tarotDeck[card.name][card.orientation];
-        const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
-        const direction = card.orientation === "up" ? "정방향" : "역방향";
-        resultHTML += `
-          <div class="card">${info.emoji} ${card.name} ${arrow} (${direction})<br>
-          점수: ${info.score}점</div>`;
-      });
+  let comboMessage = "";
 
-      resultHTML += `<p><strong>${comboMessage}</strong></p>`;
+  if (rareCombos[currentComboKey]) {
+    comboMessage = rareCombos[currentComboKey];
+  } else {
+    if (upCount === 3) comboMessage = "정방향 3장! 운이 강하게 따라붙습니다 🎯";
+    else if (downCount === 3) comboMessage = "모두 역방향... 예상과 다른 흐름이에요 ⚠️";
+    else if (upCount === 2) comboMessage = "정방향 2장 😊 운이 트이기 시작했어요!";
+    else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요.";
+    else comboMessage = ""; // 정역 반반은 멘트 없음
+  }
 
-      const ratingText = totalScore === 30 ? "총합: 30점 (만점!)" :
-        totalScore <= 10 ? `총합: ${totalScore}점 (운보소 ㅋㅋㅋ)` :
-        `총합: ${totalScore}점 (상위 ${Math.round((totalScore / 30) * 100)}%)`;
+  let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
+  selectedSet.forEach(card => {
+    const info = tarotDeck[card.name][card.orientation];
+    const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
+    const direction = card.orientation === "up" ? "정방향" : "역방향";
+    resultHTML += `
+      <div class="card">${info.emoji} ${card.name} ${arrow} (${direction})<br>
+      점수: ${info.score}점</div>`;
+  });
 
-      resultHTML += `<p><strong>${ratingText}</strong></p>`;
-      document.getElementById("resultArea").innerHTML = resultHTML;
+  if (comboMessage) {
+    resultHTML += `<p><strong>${comboMessage}</strong></p>`;
+  }
 
-      let summaryHTML = `<h3>📊 다른 선택지 점수 요약</h3>`;
-      ["A", "B", "C"].forEach(label => {
-        if (label === choice) return;
-        const score = bundles[label].reduce(
-          (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
-          0
-        );
-        const percent = Math.round((score / 30) * 100);
-        summaryHTML += `<p>🔸 ${label} 카드: ${score}점 (${percent}%)</p>`;
-      });
+  const ratingText = totalScore === 30 ? "총합: 30점 (만점!)" :
+    totalScore <= 10 ? `총합: ${totalScore}점 (운보소 ㅋㅋㅋ)` :
+    `총합: ${totalScore}점 (상위 ${Math.round((totalScore / 30) * 100)}%)`;
 
-      document.getElementById("summary").innerHTML = summaryHTML;
-      document.getElementById("buttonArea").style.display = "none";
-    }
+  resultHTML += `<p><strong>${ratingText}</strong></p>`;
+  document.getElementById("resultArea").innerHTML = resultHTML;
 
-    function shareResult() {
-      if (!selectedSet) return alert("카드를 먼저 선택해 주세요!");
-      const shareText = selectedSet.map(card => {
-        const info = tarotDeck[card.name][card.orientation];
-        const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
-        return `${info.emoji} ${card.name} ${arrow}`;
-      }).join(", ");
-      const totalScore = selectedSet.reduce((sum, c) => sum + tarotDeck[c.name][c.orientation].score, 0);
-      const fullText = `🔮 운빨배틀타로 결과!\n[${shareText}]\n총점: ${totalScore}점\n👉 https://jeffersonwattson.github.io/tarot-ai/`;
-      if (navigator.share) {
-        navigator.share({ title: "운빨배틀타로", text: fullText, url: window.location.href });
-      } else {
-        navigator.clipboard.writeText(fullText).then(() => alert("결과 복사됨 📋"));
-      }
-    }
+  let summaryHTML = `<h3>📊 다른 선택지 점수 요약</h3>`;
+  ["A", "B", "C"].forEach(label => {
+    if (label === choice) return;
+    const score = bundles[label].reduce(
+      (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
+      0
+    );
+    const percent = Math.round((score / 30) * 100);
+    summaryHTML += `<p>🔸 ${label} 카드: ${score}점 (${percent}%)</p>`;
+  });
 
-    window.onload = prepareDeck;
-  </script>
+  document.getElementById("summary").innerHTML = summaryHTML;
+  document.getElementById("buttonArea").style.display = "none";
+}
 
-  <!-- ✅ 쿠팡 광고 -->
-  <script src="https://ads-partners.coupang.com/g.js"></script>
-  <script type="text/javascript">
-    new PartnersCoupang.G({
-      "id":577509,
-      "template":"carousel",
-      "trackingCode":"AF7035269",
-      "width":"800",
-      "height":"150",
-      "SubParam":"21445789db"
-    });
-  </script>
+function shareResult() {
+  if (!selectedSet) return alert("카드를 먼저 선택해 주세요!");
+  const shareText = selectedSet.map(card => {
+    const info = tarotDeck[card.name][card.orientation];
+    const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
+    return `${info.emoji} ${card.name} ${arrow}`;
+  }).join(", ");
+  const totalScore = selectedSet.reduce(
+    (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
+    0
+  );
+  const fullText = `🔮 운빨배틀타로 결과!\n[${shareText}]\n총점: ${totalScore}점\n👉 https://jeffersonwattson.github.io/tarot-ai/`;
+
+  if (navigator.share) {
+    navigator.share({ title: "운빨배틀타로", text: fullText, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(fullText).then(() => alert("결과 복사됨 📋"));
+  }
+}
+
+window.onload = prepareDeck;
+</script>
+
+<!-- ✅ 쿠팡 광고 -->
+<script src="https://ads-partners.coupang.com/g.js"></script>
+<script type="text/javascript">
+  new PartnersCoupang.G({
+    "id":577509,
+    "template":"carousel",
+    "trackingCode":"AF7035269",
+    "width":"800",
+    "height":"150",
+    "SubParam":"21445789db"
+  });
+</script>
 </body>
 </html>
 
