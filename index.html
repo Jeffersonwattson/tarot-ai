@@ -38,10 +38,14 @@
 <body>
   <h1>🔮 운빨배틀타로</h1>
   <p>오늘의 운을 세 장의 타로카드로 확인해보세요!</p>
+ <p><strong>운명을 선택하고 싶다면 A, B, C 버튼 중 하나를 눌러주세요!</strong></p>
+<p><strong>다시 뽑고 싶다면 [30점만점] 버튼을 눌러 새 운을 확인하세요 ✨</strong></p>
+
+<p>오늘의 운을 세 장의 타로카드로 확인해보세요!</p>
   <p>
     📌 더 많은 돈 되는 실험은  
     <a href="https://blog.naver.com/greenfrog232" target="_blank">
-      세컨머니 실험실 블로그V1.87
+      세컨머니 실험실 블로그V1.88
     </a>
     에서 확인해보세요!
   </p>
@@ -156,35 +160,35 @@ const rareCombosSimple = {
   ["악마|마법사|연인".split("|").sort().join("|")]: "매혹적인 유혹! 기술과 감정의 위태로운 줄타기 😈🧙💘 (레어68)"+ coupangLink,
   ["교황|황제|The Sun".split("|").sort().join("|")]: "풍요와 지혜, 따뜻한 축복이 함께하는 하루 🌞👑🙏 (레어69)"+ coupangLink,
   ["마법사|여사제|여황제".split("|").sort().join("|")]: "사랑과 이성 사이에서 혼자의 시간이 필요한 날 💘⚖️🧘 (레어70)"+ coupangLink,
-  ["The Sun|마법사|전차".split("|").sort().join("|")]: "활력과 기술, 속도가 어우러진 강력한 하루 ☀️🧙🏎️ (레어71) + coupangLink",
-  ["빡통|운명의 수레바퀴|정의".split("|").sort().join("|")]: "혼돈 속에도 정의는 있다! 오늘은 반전의 날 🤡🎡⚖️ (레어72) + coupangLink",
-  ["마법사|악마|전차".split("|").sort().join("|")]: "능력과 유혹, 질주가 섞인 아찔한 하루 🧙😈🏎️ (레어73) + coupangLink",
-  ["빡통|정의|힘,기백".split("|").sort().join("|")]: "정신줄 단단히! 웃긴 상황에서도 중심을 💪🤡⚖️ (레어74) + coupangLink",
-  ["빡통|악마|여황제".split("|").sort().join("|")]: "위험한 매력, 감성폭발 주의보 🤡😈👑 (레어75) + coupangLink",
-  ["The Moon|The World|정의".split("|").sort().join("|")]: "진실을 직면하고 완성을 향해! 감정과 이성이 맞서는 날 🌙🌍⚖️ (레어76) + coupangLink",
-  ["빡통|여사제|연인".split("|").sort().join("|")]: "순수한 감성과 사랑… 하지만 방해요소도 존재! 🤡👸💘 (레어77) + coupangLink",
-  ["The Moon|교황|연인".split("|").sort().join("|")]: "감정과 신념, 사랑 사이에서 조율이 필요한 날 🌙🙏💘 (레어78) + coupangLink",
-  ["여사제|은둔자,찐따|전차".split("|").sort().join("|")]: "혼자만의 직관, 이젠 세상 밖으로! 추진력을 얻으세요 👸🧘🏎️ (레어79) + coupangLink",
-  ["The Sun|연인|힘,기백".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. ⚔️💡🌟 (레어80) + coupangLink",
-  ["여사제|운명의 수레바퀴|절제".split("|").sort().join("|")]: "진심이 통하는 하루가 될 거예요. 💡🛡️🌟 (레어81) + coupangLink",
-  ["The Sun|악마|여사제".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. 🛡️💫🧲 (레어82) + coupangLink",
-  ["빡통|심판|정의".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 🕊️💥🌪️ (레어83) + coupangLink",
-  ["The Tower|교황|황제".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 💡💥🕊️ (레어84) + coupangLink",
-  ["심판|여황제|힘,기백".split("|").sort().join("|")]: "이성보다 본능이 앞서는 순간들. 💥🌀🌪️ (레어85) + coupangLink",
-  ["빡통|악마|은둔자,찐따".split("|").sort().join("|")]: "도전과 응전의 균형이 핵심! 🌟⚔️🔥 (레어86) + coupangLink",
-  ["The World|악마|전차".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 🔥🕊️🌟 (레어87) + coupangLink",
-  ["교황|매달린사람|절제".split("|").sort().join("|")]: "이성보다 본능이 앞서는 순간들. 💥🕊️💡 (레어88) + coupangLink",
-  ["The Moon|운명의 수레바퀴|황제".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. 💡🕊️🔥 (레어89) + coupangLink",
-  ["The Tower|여황제|전차".split("|").sort().join("|")]: "감정의 물결 위에서 중심을 잡아야! 🌪️🌀🔥 (레어90) + coupangLink",
-  ["The World|연인|절제".split("|").sort().join("|")]: "예상 못한 전개, 기회를 잡아야 해요! 🧲🛡️💡 (레어91) + coupangLink",
-  ["매달린사람|정의|힘,기백".split("|").sort().join("|")]: "운명이 당신의 편일 수도 있어요. 💥🧲🔮 (레어92) + coupangLink",
-  ["The Sun|The Tower|여사제".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. 💥🔮🔥 (레어93) + coupangLink",
-  ["The World|마법사|심판".split("|").sort().join("|")]: "진심이 통하는 하루가 될 거예요. 🧲🎯🔥 (레어94) + coupangLink",
-  ["매달린사람|은둔자,찐따|절제".split("|").sort().join("|")]: "오늘은 강력한 에너지가 작동하는 날! 🎯💡🌀 (레어95) + coupangLink",
-  ["심판|여사제|은둔자,찐따".split("|").sort().join("|")]: "도전과 응전의 균형이 핵심! 🧲🛡️🔮 (레어96) + coupangLink",
-  ["The Moon|악마|여사제".split("|").sort().join("|")]: "혼란 속 진실이 보일 수 있어요. 🧲🌟🕊️ (레어97) + coupangLink",
-  ["The World|여사제|운명의 수레바퀴".split("|").sort().join("|")]: "오늘은 강력한 에너지가 작동하는 날! 🌀💥🕊️ (레어98) + coupangLink",
-  ["마법사|여사제|힘,기백".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 💫🌪️🛡️ (레어99) + coupangLink"
+  ["The Sun|마법사|전차".split("|").sort().join("|")]: "활력과 기술, 속도가 어우러진 강력한 하루 ☀️🧙🏎️ (레어71)" + coupangLink,
+  ["빡통|운명의 수레바퀴|정의".split("|").sort().join("|")]: "혼돈 속에도 정의는 있다! 오늘은 반전의 날 🤡🎡⚖️ (레어72)" + coupangLink,
+  ["마법사|악마|전차".split("|").sort().join("|")]: "능력과 유혹, 질주가 섞인 아찔한 하루 🧙😈🏎️ (레어73)" + coupangLink,
+  ["빡통|정의|힘,기백".split("|").sort().join("|")]: "정신줄 단단히! 웃긴 상황에서도 중심을 💪🤡⚖️ (레어74)" + coupangLink,
+  ["빡통|악마|여황제".split("|").sort().join("|")]: "위험한 매력, 감성폭발 주의보 🤡😈👑 (레어75)" + coupangLink,
+  ["The Moon|The World|정의".split("|").sort().join("|")]: "진실을 직면하고 완성을 향해! 감정과 이성이 맞서는 날 🌙🌍⚖️ (레어76)" + coupangLink,
+  ["빡통|여사제|연인".split("|").sort().join("|")]: "순수한 감성과 사랑… 하지만 방해요소도 존재! 🤡👸💘 (레어77)" + coupangLink,
+  ["The Moon|교황|연인".split("|").sort().join("|")]: "감정과 신념, 사랑 사이에서 조율이 필요한 날 🌙🙏💘 (레어78)" + coupangLink,
+  ["여사제|은둔자,찐따|전차".split("|").sort().join("|")]: "혼자만의 직관, 이젠 세상 밖으로! 추진력을 얻으세요 👸🧘🏎️ (레어79)" + coupangLink,
+  ["The Sun|연인|힘,기백".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. ⚔️💡🌟 (레어80)" + coupangLink,
+  ["여사제|운명의 수레바퀴|절제".split("|").sort().join("|")]: "진심이 통하는 하루가 될 거예요. 💡🛡️🌟 (레어81)" + coupangLink,
+  ["The Sun|악마|여사제".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. 🛡️💫🧲 (레어82)" + coupangLink,
+  ["빡통|심판|정의".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 🕊️💥🌪️ (레어83)" + coupangLink,
+  ["The Tower|교황|황제".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 💡💥🕊️ (레어84)" + coupangLink,
+  ["심판|여황제|힘,기백".split("|").sort().join("|")]: "이성보다 본능이 앞서는 순간들. 💥🌀🌪️ (레어85)" + coupangLink,
+  ["빡통|악마|은둔자,찐따".split("|").sort().join("|")]: "도전과 응전의 균형이 핵심! 🌟⚔️🔥 (레어86)" + coupangLink,
+  ["The World|악마|전차".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 🔥🕊️🌟 (레어87)" + coupangLink,
+  ["교황|매달린사람|절제".split("|").sort().join("|")]: "이성보다 본능이 앞서는 순간들. 💥🕊️💡 (레어88)" + coupangLink,
+  ["The Moon|운명의 수레바퀴|황제".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. 💡🕊️🔥 (레어89)" + coupangLink,
+  ["The Tower|여황제|전차".split("|").sort().join("|")]: "감정의 물결 위에서 중심을 잡아야! 🌪️🌀🔥 (레어90)" + coupangLink,
+  ["The World|연인|절제".split("|").sort().join("|")]: "예상 못한 전개, 기회를 잡아야 해요! 🧲🛡️💡 (레어91)" + coupangLink,
+  ["매달린사람|정의|힘,기백".split("|").sort().join("|")]: "운명이 당신의 편일 수도 있어요. 💥🧲🔮 (레어92)" + coupangLink,
+  ["The Sun|The Tower|여사제".split("|").sort().join("|")]: "지금은 잠시 멈추고 조율할 시간. 💥🔮🔥 (레어93)" + coupangLink,
+  ["The World|마법사|심판".split("|").sort().join("|")]: "진심이 통하는 하루가 될 거예요. 🧲🎯🔥 (레어94)" + coupangLink,
+  ["매달린사람|은둔자,찐따|절제".split("|").sort().join("|")]: "오늘은 강력한 에너지가 작동하는 날! 🎯💡🌀 (레어95)" + coupangLink,
+  ["심판|여사제|은둔자,찐따".split("|").sort().join("|")]: "도전과 응전의 균형이 핵심! 🧲🛡️🔮 (레어96)" + coupangLink,
+  ["The Moon|악마|여사제".split("|").sort().join("|")]: "혼란 속 진실이 보일 수 있어요. 🧲🌟🕊️ (레어97)" + coupangLink,
+  ["The World|여사제|운명의 수레바퀴".split("|").sort().join("|")]: "오늘은 강력한 에너지가 작동하는 날! 🌀💥🕊️ (레어98)" + coupangLink,
+  ["마법사|여사제|힘,기백".split("|").sort().join("|")]: "행동보다 통찰이 필요한 하루! 💫🌪️🛡️ (레어99)" + coupangLink
 };
   
 
