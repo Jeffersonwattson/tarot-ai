@@ -41,7 +41,7 @@
   <p>
     📌 더 많은 돈 되는 실험은  
     <a href="https://blog.naver.com/greenfrog232" target="_blank">
-      세컨머니 실험실 블로그V1.1
+      세컨머니 실험실 블로그V1.2
     </a>
     에서 확인해보세요!
   </p>
@@ -83,13 +83,12 @@ const tarotDeck = {
   "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } }
 };
 
-// ✅ 간단조합 방식: 이름 3개만 일치하면 멘트 출력
 const rareCombosSimple = {
-  "The Sun|The World|연인": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
-  "죽음|The Tower|악마": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
-  "운명의 수레바퀴|심판|정의": "운명과 정의, 그리고 심판! 변화의 중심에 있습니다 ⚖️🌀📣 (레어)",
-  "The Star|The Moon|The Sun": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
-  "매달린사람|빡통|은둔자,찐따": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
+  ["The Sun|The World|연인".split("|").sort().join("|")]: "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
+  ["죽음|The Tower|악마".split("|").sort().join("|")]: "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
+  ["운명의 수레바퀴|심판|정의".split("|").sort().join("|")]: "운명과 정의, 그리고 심판! 변화의 중심에 있습니다 ⚖️🌀📣 (레어)",
+  ["The Star|The Moon|The Sun".split("|").sort().join("|")]: "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
+  ["매달린사람|빡통|은둔자,찐따".split("|").sort().join("|")]: "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
 };
 
 let bundles = { A: [], B: [], C: [] };
@@ -112,6 +111,7 @@ function drawThreeCards() {
 
   return result;
 }
+
 function prepareDeck() {
   bundles.A = drawThreeCards();
   bundles.B = drawThreeCards();
@@ -124,26 +124,18 @@ function chooseCard(choice) {
   selectedSet = bundles[choice];
   document.querySelectorAll("#buttonArea button").forEach(btn => btn.disabled = true);
 
-  console.log("👉 선택된 카드:", selectedSet);
-
   let upCount = 0;
   let downCount = 0;
 
   const totalScore = selectedSet.reduce((sum, card) => {
     const info = tarotDeck[card.name]?.[card.orientation];
-    if (!info) {
-      console.warn("❌ 카드 정보 없음:", card.name, card.orientation);
-      return sum;
-    }
+    if (!info) return sum;
     if (card.orientation === "up") upCount++;
     else downCount++;
     return sum + info.score;
   }, 0);
 
-  // ✅ 간단조합 key 생성 (이름만 정렬)
   const currentComboKey = selectedSet.map(c => c.name).sort().join("|");
-  console.log("🔑 간단조합 키:", currentComboKey);
-
   let comboMessage = rareCombosSimple[currentComboKey] || "";
 
   if (!comboMessage) {
@@ -151,16 +143,13 @@ function chooseCard(choice) {
     else if (downCount === 3) comboMessage = "모두 역방향... 예상과 다른 흐름이에요 ⚠️";
     else if (upCount === 2) comboMessage = "정방향 2장 😊 운이 트이기 시작했어요!";
     else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요!";
-    else comboMessage = ""; // 정역 반반은 멘트 없음
+    else comboMessage = "";
   }
 
   let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
   selectedSet.forEach(card => {
     const info = tarotDeck[card.name]?.[card.orientation];
-    if (!info) {
-      resultHTML += `<div class="card">❌ 오류: ${card.name} (${card.orientation})</div>`;
-      return;
-    }
+    if (!info) return;
     const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
     const direction = card.orientation === "up" ? "정방향" : "역방향";
     resultHTML += `
@@ -193,8 +182,28 @@ function chooseCard(choice) {
   document.getElementById("summary").innerHTML = summaryHTML;
   document.getElementById("buttonArea").style.display = "none";
 }
+
+function shareResult() {
+  if (!selectedSet) return alert("카드를 먼저 선택해 주세요!");
+  const shareText = selectedSet.map(card => {
+    const info = tarotDeck[card.name][card.orientation];
+    const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
+    return `${info.emoji} ${card.name} ${arrow}`;
+  }).join(", ");
+  const totalScore = selectedSet.reduce(
+    (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
+    0
+  );
+  const fullText = `🔮 운빨배틀타로 결과!\n[${shareText}]\n총점: ${totalScore}점\n👉 https://jeffersonwattson.github.io/tarot-ai/`;
+
+  if (navigator.share) {
+    navigator.share({ title: "운빨배틀타로", text: fullText, url: window.location.href });
+  } else {
+    navigator.clipboard.writeText(fullText).then(() => alert("결과 복사됨 📋"));
+  }
+}
+
 window.onload = prepareDeck;
 </script>
 </body>
 </html>
-
