@@ -18,7 +18,7 @@
       margin: 1rem;
     }
 
-    #resultArea, #bonusMessage, #summary, #visitorCount {
+    #resultArea, #summary {
       margin-top: 1.5rem;
     }
 
@@ -36,22 +36,14 @@
     }
 
     @media (max-width: 600px) {
-      body {
-        font-size: 0.9rem;
-      }
-      .card {
-        font-size: 1.4rem;
-      }
+      body { font-size: 0.9rem; }
+      .card { font-size: 1.4rem; }
       button {
         font-size: 0.9rem;
         padding: 0.5rem 1rem;
       }
-      h1 {
-        font-size: 1.5rem;
-      }
-      p, a {
-        font-size: 0.9rem;
-      }
+      h1 { font-size: 1.5rem; }
+      p, a { font-size: 0.9rem; }
     }
   </style>
 </head>
@@ -72,10 +64,9 @@
     <button onclick="chooseCard('C')">C</button>
   </div>
   <button onclick="location.reload()">다시하기</button>
-  <button onclick="shareResult()">공유하기</button>
+  <button onclick="shareResult()">30점만점</button>
 
   <div id="resultArea"></div>
-  <div id="bonusMessage"></div>
   <div id="summary"></div>
 
   <script>
@@ -105,11 +96,11 @@
     };
 
     const rareCombos = {
-      "연인⬆️-The Sun⬆️-The World⬆️": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
-      "죽음⬇️-The Tower⬇️-악마⬇️": "심상치 않은 조합입니다. 격변의 하루, 내면을 단단히 다잡으세요. (레어)",
-      "운명의 수레바퀴⬆️-정의⬆️-심판⬆️": "운명과 정의, 그리고 심판! 변화가 다가오며 결과가 뒤따릅니다 ⚖️🌀📣 (레어)",
-      "The Star⬆️-The Moon⬆️-The Sun⬆️": "밤과 낮의 경계에서 기회가 피어납니다. 감성적 흐름이 강해지는 날 🌟🌙☀️ (레어)",
-      "빡통⬇️-은둔자,찐따⬇️-매달린사람⬇️": "혼자만의 세계에 빠질 수 있어요. 오늘은 조용한 하루를 추천합니다... (레어)"
+      "The Sun⬆️-The World⬆️-연인⬆️": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
+      "The Tower⬇️-악마⬇️-죽음⬇️": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
+      "운명의 수레바퀴⬆️-정의⬆️-심판⬆️": "운명과 정의, 그리고 심판! 변화의 중심에 있습니다 ⚖️🌀📣 (레어)",
+      "The Moon⬆️-The Star⬆️-The Sun⬆️": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
+      "매달린사람⬇️-은둔자,찐따⬇️-빡통⬇️": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
     };
 
     let bundles = { A: [], B: [], C: [] };
@@ -143,7 +134,6 @@
       if (revealed) return;
       revealed = true;
       selectedSet = bundles[choice];
-
       document.querySelectorAll("#buttonArea button").forEach(btn => btn.disabled = true);
 
       let upCount = 0, downCount = 0;
@@ -155,15 +145,19 @@
 
       const currentComboKey = selectedSet
         .map(c => `${c.name}${c.orientation === "up" ? "⬆️" : "⬇️"}`)
+        .sort()
         .join("-");
 
-      let comboMessage = rareCombos[currentComboKey] || (() => {
-        if (upCount === 3) return "정방향 3장! 운이 강하게 따라붙습니다 🎯";
-        if (downCount === 3) return "모두 역방향... ⚠️ 예상과 다른 흐름이네요.";
-        if (upCount === 2) return "정방향 2장 😊 운이 트이기 시작했어요!";
-        if (downCount === 2) return "역방향 2장. 신중한 하루가 될 수 있어요.";
-        return "정역 반반 ⚖️ 오늘의 선택이 큰 영향을 줄지도 몰라요.";
-      })();
+      let comboMessage = "";
+      if (rareCombos[currentComboKey]) {
+        comboMessage = rareCombos[currentComboKey];
+      } else {
+        if (upCount === 3) comboMessage = "정방향 3장! 운이 강하게 따라붙습니다 🎯";
+        else if (downCount === 3) comboMessage = "모두 역방향... 예상과 다른 흐름이에요 ⚠️";
+        else if (upCount === 2) comboMessage = "정방향 2장 😊 운이 트이기 시작했어요!";
+        else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요.";
+        else comboMessage = "정역 반반 ⚖️ 오늘의 선택이 결과를 바꿀 수도 있어요.";
+      }
 
       let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
       selectedSet.forEach(card => {
@@ -178,8 +172,8 @@
       resultHTML += `<p><strong>${comboMessage}</strong></p>`;
 
       const ratingText = totalScore === 30 ? "총합: 30점 (만점!)" :
-                        totalScore <= 10 ? `총합: ${totalScore}점 (운보소 ㅋㅋㅋ)` :
-                        `총합: ${totalScore}점 (상위 ${Math.round((totalScore / 30) * 100)}%)`;
+        totalScore <= 10 ? `총합: ${totalScore}점 (운보소 ㅋㅋㅋ)` :
+        `총합: ${totalScore}점 (상위 ${Math.round((totalScore / 30) * 100)}%)`;
 
       resultHTML += `<p><strong>${ratingText}</strong></p>`;
       document.getElementById("resultArea").innerHTML = resultHTML;
@@ -232,4 +226,5 @@
   </script>
 </body>
 </html>
+
 
