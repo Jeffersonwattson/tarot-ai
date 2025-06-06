@@ -12,29 +12,17 @@
       text-align: center;
       padding: 2rem;
     }
-
-    .card {
-      font-size: 1.8rem;
-      margin: 1rem;
-    }
-
-    #resultArea, #summary {
-      margin-top: 1.5rem;
-    }
-
+    .card { font-size: 1.8rem; margin: 1rem; }
+    #resultArea, #summary { margin-top: 1.5rem; }
     button {
-      font-size: 1rem;
-      padding: 0.6rem 1.2rem;
-      margin: 0.5rem;
-      cursor: pointer;
+      font-size: 1rem; padding: 0.6rem 1.2rem;
+      margin: 0.5rem; cursor: pointer;
     }
-
     a {
       text-decoration: none;
       font-weight: bold;
       color: #0077cc;
     }
-
     @media (max-width: 600px) {
       body { font-size: 0.9rem; }
       .card { font-size: 1.4rem; }
@@ -53,7 +41,7 @@
   <p>
     📌 더 많은 돈 되는 실험은  
     <a href="https://blog.naver.com/greenfrog232" target="_blank">
-      세컨머니 실험실 블로그
+      세컨머니 실험실 블로그V1
     </a>
     에서 확인해보세요!
   </p>
@@ -95,13 +83,13 @@ const tarotDeck = {
   "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } }
 };
 
-// ✅ 문자열 기반 키 사용
-const rareCombos = {
-  "The Sun-up-The World-up-연인-up": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
-  "죽음-down-The Tower-down-악마-down": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
-  "정의-up-심판-up-운명의 수레바퀴-up": "운명과 정의, 그리고 심판! 변화의 중심입니다 ⚖️🌀📣 (레어)",
-  "The Moon-up-The Star-up-The Sun-up": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
-  "매달린사람-down-빡통-down-은둔자,찐따-down": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
+// ✅ 간단조합 방식: 이름 3개만 일치하면 멘트 출력
+const rareCombosSimple = {
+  "The Sun|The World|연인": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
+  "죽음|The Tower|악마": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
+  "운명의 수레바퀴|심판|정의": "운명과 정의, 그리고 심판! 변화의 중심에 있습니다 ⚖️🌀📣 (레어)",
+  "The Star|The Moon|The Sun": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
+  "매달린사람|빡통|은둔자,찐따": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
 };
 
 let bundles = { A: [], B: [], C: [] };
@@ -117,14 +105,9 @@ function drawThreeCards() {
     const name = names[Math.floor(Math.random() * names.length)];
     if (!used.has(name)) {
       used.add(name);
-      result.push({ name });
+      const orientation = Math.random() > 0.5 ? "up" : "down";
+      result.push({ name, orientation });
     }
-  }
-
-  const pattern = ["up", "up", "up"];
-  pattern.sort(() => Math.random() - 0.5);
-  for (let i = 0; i < 3; i++) {
-    result[i].orientation = pattern[i];
   }
 
   return result;
@@ -141,8 +124,7 @@ function chooseCard(choice) {
   selectedSet = bundles[choice];
   document.querySelectorAll("#buttonArea button").forEach(btn => btn.disabled = true);
 
-  // 디버깅용 로그 출력
-  console.log("👉 선택 카드:", selectedSet);
+  console.log("👉 선택된 카드:", selectedSet);
 
   let upCount = 0;
   let downCount = 0;
@@ -150,7 +132,7 @@ function chooseCard(choice) {
   const totalScore = selectedSet.reduce((sum, card) => {
     const info = tarotDeck[card.name]?.[card.orientation];
     if (!info) {
-      console.warn("❌ 잘못된 카드명 또는 방향:", card.name, card.orientation);
+      console.warn("❌ 카드 정보 없음:", card.name, card.orientation);
       return sum;
     }
     if (card.orientation === "up") upCount++;
@@ -158,30 +140,25 @@ function chooseCard(choice) {
     return sum + info.score;
   }, 0);
 
-  const currentComboKey = selectedSet
-    .map(c => `${c.name}-${c.orientation}`) // ← 여기에서 문자열 기반으로
-    .sort()
-    .join("-");
+  // ✅ 간단조합 key 생성 (이름만 정렬)
+  const currentComboKey = selectedSet.map(c => c.name).sort().join("|");
+  console.log("🔑 간단조합 키:", currentComboKey);
 
-  console.log("👉 현재 rareCombos 키:", currentComboKey);
+  let comboMessage = rareCombosSimple[currentComboKey] || "";
 
-  let comboMessage = "";
-
-  if (rareCombos[currentComboKey]) {
-    comboMessage = rareCombos[currentComboKey];
-  } else {
+  if (!comboMessage) {
     if (upCount === 3) comboMessage = "정방향 3장! 운이 강하게 따라붙습니다 🎯";
     else if (downCount === 3) comboMessage = "모두 역방향... 예상과 다른 흐름이에요 ⚠️";
     else if (upCount === 2) comboMessage = "정방향 2장 😊 운이 트이기 시작했어요!";
     else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요!";
-    else comboMessage = ""; // 정역 반반은 메시지 없음
+    else comboMessage = ""; // 정역 반반은 멘트 없음
   }
 
   let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
   selectedSet.forEach(card => {
     const info = tarotDeck[card.name]?.[card.orientation];
     if (!info) {
-      resultHTML += `<div class="card">❌ 오류: 알 수 없는 카드 (${card.name})</div>`;
+      resultHTML += `<div class="card">❌ 오류: ${card.name} (${card.orientation})</div>`;
       return;
     }
     const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
@@ -216,6 +193,79 @@ function chooseCard(choice) {
   document.getElementById("summary").innerHTML = summaryHTML;
   document.getElementById("buttonArea").style.display = "none";
 }
+<script>
+function chooseCard(choice) {
+  if (revealed) return;
+  revealed = true;
+  selectedSet = bundles[choice];
+  document.querySelectorAll("#buttonArea button").forEach(btn => btn.disabled = true);
+
+  console.log("👉 선택 카드:", selectedSet);
+
+  let upCount = 0;
+  let downCount = 0;
+  let totalScore = 0;
+
+  const cardNames = selectedSet.map(card => {
+    const orientation = card.orientation;
+    const info = tarotDeck[card.name][orientation];
+    totalScore += info.score;
+    if (orientation === "up") upCount++;
+    else downCount++;
+    return card.name;
+  });
+
+  // 정렬된 카드이름으로 조합 키 생성
+  const sortedKey = cardNames.slice().sort().join("|");
+
+  // 레어멘트 출력
+  let comboMessage = "";
+  if (rareCombosSimple[sortedKey]) {
+    comboMessage = rareCombosSimple[sortedKey];
+  } else {
+    if (upCount === 3) comboMessage = "정방향 3장! 운이 강하게 따라붙습니다 🎯";
+    else if (downCount === 3) comboMessage = "모두 역방향... 예상과 다른 흐름이에요 ⚠️";
+    else if (upCount === 2) comboMessage = "정방향 2장 😊 운이 트이기 시작했어요!";
+    else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요!";
+    else comboMessage = ""; // 정역 반반은 표시 안함
+  }
+
+  let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
+  selectedSet.forEach(card => {
+    const info = tarotDeck[card.name][card.orientation];
+    const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
+    const direction = card.orientation === "up" ? "정방향" : "역방향";
+    resultHTML += `
+      <div class="card">${info.emoji} ${card.name} ${arrow} (${direction})<br>
+      점수: ${info.score}점</div>`;
+  });
+
+  if (comboMessage) {
+    resultHTML += `<p><strong>${comboMessage}</strong></p>`;
+  }
+
+  const ratingText = totalScore === 30 ? "총합: 30점 (만점!)" :
+    totalScore <= 10 ? `총합: ${totalScore}점 (운보소 ㅋㅋㅋ)` :
+    `총합: ${totalScore}점 (상위 ${Math.round((totalScore / 30) * 100)}%)`;
+
+  resultHTML += `<p><strong>${ratingText}</strong></p>`;
+  document.getElementById("resultArea").innerHTML = resultHTML;
+
+  let summaryHTML = `<h3>📊 다른 선택지 점수 요약</h3>`;
+  ["A", "B", "C"].forEach(label => {
+    if (label === choice) return;
+    const score = bundles[label].reduce((sum, c) => {
+      const info = tarotDeck[c.name][c.orientation];
+      return sum + (info?.score || 0);
+    }, 0);
+    const percent = Math.round((score / 30) * 100);
+    summaryHTML += `<p>🔸 ${label} 카드: ${score}점 (${percent}%)</p>`;
+  });
+
+  document.getElementById("summary").innerHTML = summaryHTML;
+  document.getElementById("buttonArea").style.display = "none";
+}
+
 function shareResult() {
   if (!selectedSet) return alert("카드를 먼저 선택해 주세요!");
   const shareText = selectedSet.map(card => {
@@ -238,19 +288,4 @@ function shareResult() {
 
 window.onload = prepareDeck;
 </script>
-
-<!-- ✅ 쿠팡 광고 -->
-<script src="https://ads-partners.coupang.com/g.js"></script>
-<script type="text/javascript">
-  new PartnersCoupang.G({
-    "id":577509,
-    "template":"carousel",
-    "trackingCode":"AF7035269",
-    "width":"800",
-    "height":"150",
-    "SubParam":"21445789db"
-  });
-</script>
-</body>
-</html>
 
