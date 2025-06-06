@@ -11,17 +11,12 @@
       color: #333;
       text-align: center;
       padding: 2rem;
-      padding-bottom: 5rem; /* 하단 버튼 공간 확보 */
     }
     .card { font-size: 1.8rem; margin: 1rem; }
     #resultArea, #summary { margin-top: 1.5rem; }
     button {
-      font-size: 1rem;
-      padding: 0.6rem 1.2rem;
-      margin: 0.5rem;
-      cursor: pointer;
-      position: relative;
-      z-index: 10;
+      font-size: 1rem; padding: 0.6rem 1.2rem;
+      margin: 0.5rem; cursor: pointer;
     }
     a {
       text-decoration: none;
@@ -44,9 +39,9 @@
   <h1>🔮 운빨배틀타로</h1>
   <p>오늘의 운을 세 장의 타로카드로 확인해보세요!</p>
   <p>
-    📌 더 많은 돈 되는 실험은
+    📌 더 많은 돈 되는 실험은  
     <a href="https://blog.naver.com/greenfrog232" target="_blank">
-      세컨머니 실험실 블로그V1.9
+      세컨머니 실험실 블로그V1.8
     </a>
     에서 확인해보세요!
   </p>
@@ -56,12 +51,12 @@
     <button onclick="chooseCard('B')">B</button>
     <button onclick="chooseCard('C')">C</button>
   </div>
-
-  <button id="restartBtn">다시하기</button>
+  <button onclick="location.reload()">다시하기</button>
   <button onclick="shareResult()">공유하기</button>
 
   <div id="resultArea"></div>
   <div id="summary"></div>
+
 <script>
 const tarotDeck = {
   "빡통": { up: { score: 7, emoji: "🤡" }, down: { score: 3, emoji: "🤡" } },
@@ -280,14 +275,6 @@ function shareResult() {
 
 window.onload = prepareDeck;
 </script>
-  <script>
-    window.addEventListener("DOMContentLoaded", function () {
-      const btn = document.getElementById("restartBtn");
-      if (btn) {
-        btn.addEventListener("click", () => location.reload());
-        btn.addEventListener("touchstart", () => location.reload());
-      }
-    });
-  </script>
 </body>
 </html>
+
