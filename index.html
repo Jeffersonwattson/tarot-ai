@@ -41,7 +41,7 @@
   <p>
     📌 더 많은 돈 되는 실험은  
     <a href="https://blog.naver.com/greenfrog232" target="_blank">
-      세컨머니 실험실 블로그V1.83
+      세컨머니 실험실 블로그V1.84
     </a>
     에서 확인해보세요!
   </p>
@@ -82,15 +82,16 @@ const tarotDeck = {
   "심판": { up: { score: 9, emoji: "📣" }, down: { score: 5, emoji: "📣" } },
   "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } }
 };
+const coupangLink = '<br><a href="https://link.coupang.com/a/cxJcGB">🛍️ 오늘의 운세템 보러가기 (쿠팡)</a>';
 
 const rareCombosSimple = {
-  ["The Moon|The Star|The Sun".split("|").sort().join("|")]: "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어1)",
-  ["The Moon|운명의 수레바퀴|여사제".split("|").sort().join("|")]: "직관과 흐름을 믿으세요. 감춰진 기회가 보일지도 🌙🎡👁️ (레어2)",
-  ["The Star|교황|절제".split("|").sort().join("|")]: "영적인 치유와 조화의 기운이 가득한 하루입니다 🙏🌈✨ (레어3)",
-  ["The Star|심판|은둔자,찐따".split("|").sort().join("|")]: "쌓은 노력, 드디어 빛을 볼 준비가 되었습니다 ✨🧘📣 (레어4)",
-  ["The Star|여사제|연인".split("|").sort().join("|")]: "이상과 사랑의 하모니! 설렘 가득한 하루 💘✨👸 (레어)",
-  ["The Sun|The World|연인".split("|").sort().join("|")]: "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어5)",
-  ["The Sun|전차|정의".split("|").sort().join("|")]: "정의로운 돌진! 오늘은 내가 법이다 🏎️☀️⚖️ (레어6)",
+  ["The Moon|The Star|The Sun".split("|").sort().join("|")]: "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어1)"+ coupangLink,
+  ["The Moon|운명의 수레바퀴|여사제".split("|").sort().join("|")]: "직관과 흐름을 믿으세요. 감춰진 기회가 보일지도 🌙🎡👁️ (레어2)"+ coupangLink,
+  ["The Star|교황|절제".split("|").sort().join("|")]: "영적인 치유와 조화의 기운이 가득한 하루입니다 🙏🌈✨ (레어3)"+ coupangLink,
+  ["The Star|심판|은둔자,찐따".split("|").sort().join("|")]: "쌓은 노력, 드디어 빛을 볼 준비가 되었습니다 ✨🧘📣 (레어4)"+ coupangLink,
+  ["The Star|여사제|연인".split("|").sort().join("|")]: "이상과 사랑의 하모니! 설렘 가득한 하루 💘✨👸 (레어)"+ coupangLink,
+  ["The Sun|The World|연인".split("|").sort().join("|")]: "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어5)"+ coupangLink,
+  ["The Sun|전차|정의".split("|").sort().join("|")]: "정의로운 돌진! 오늘은 내가 법이다 🏎️☀️⚖️ (레어6)"+ coupangLink,
   ["The Tower|운명의 수레바퀴|전차".split("|").sort().join("|")]: "멈출 수 없는 변화의 질주! 새판 짜기 시작! 🎡🏎️💀 (레어7)",
   ["The Tower|전차|힘,기백".split("|").sort().join("|")]: "강한 추진력도 필요하지만 조심! 속도 조절! 🏎️💥💪 (레어8)",
   ["The Tower|빡통|전차".split("|").sort().join("|")]: "아찔한 질주, 정신줄 조심! 오늘은 사고방지데이 🤡🏎️😈 (레어9)",
