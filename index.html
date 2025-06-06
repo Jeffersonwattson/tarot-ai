@@ -95,12 +95,13 @@ const tarotDeck = {
   "The World": { up: { score: 10, emoji: "🌍" }, down: { score: 6, emoji: "🌍" } }
 };
 
+// ✅ 문자열 기반 키 사용
 const rareCombos = {
-  "The Sun⬆️-The World⬆️-연인⬆️": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
-  "The Tower⬇️-악마⬇️-죽음⬇️": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
-  "심판⬆️-운명의 수레바퀴⬆️-정의⬆️": "운명과 정의, 그리고 심판! 변화의 중심에 있습니다 ⚖️🌀📣 (레어)",
-  "The Moon⬆️-The Star⬆️-The Sun⬆️": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
-  "매달린사람⬇️-빡통⬇️-은둔자,찐따⬇️": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
+  "The Sun-up-The World-up-연인-up": "완벽한 사랑과 성공! 오늘은 우주의 축복이 함께합니다 💖🌞🌍 (레어)",
+  "죽음-down-The Tower-down-악마-down": "심상치 않은 조합입니다. 내면을 단단히 다잡으세요. (레어)",
+  "정의-up-심판-up-운명의 수레바퀴-up": "운명과 정의, 그리고 심판! 변화의 중심입니다 ⚖️🌀📣 (레어)",
+  "The Moon-up-The Star-up-The Sun-up": "밤과 낮의 경계에서 기회가 피어납니다 🌟🌙☀️ (레어)",
+  "매달린사람-down-빡통-down-은둔자,찐따-down": "혼자만의 세계에 빠질 수 있어요. 조용한 하루를 추천합니다. (레어)"
 };
 
 let bundles = { A: [], B: [], C: [] };
@@ -120,7 +121,7 @@ function drawThreeCards() {
     }
   }
 
-  const pattern = ["up", "down", "up"]; // 랜덤 정역 비율 필요시 여기에 커스터마이징 가능
+  const pattern = ["up", "up", "up"];
   pattern.sort(() => Math.random() - 0.5);
   for (let i = 0; i < 3; i++) {
     result[i].orientation = pattern[i];
@@ -140,18 +141,29 @@ function chooseCard(choice) {
   selectedSet = bundles[choice];
   document.querySelectorAll("#buttonArea button").forEach(btn => btn.disabled = true);
 
+  // 디버깅용 로그 출력
+  console.log("👉 선택 카드:", selectedSet);
+
   let upCount = 0;
   let downCount = 0;
+
   const totalScore = selectedSet.reduce((sum, card) => {
+    const info = tarotDeck[card.name]?.[card.orientation];
+    if (!info) {
+      console.warn("❌ 잘못된 카드명 또는 방향:", card.name, card.orientation);
+      return sum;
+    }
     if (card.orientation === "up") upCount++;
     else downCount++;
-    return sum + tarotDeck[card.name][card.orientation].score;
+    return sum + info.score;
   }, 0);
 
   const currentComboKey = selectedSet
-    .map(c => `${c.name}${c.orientation === "up" ? "⬆️" : "⬇️"}`)
+    .map(c => `${c.name}-${c.orientation}`) // ← 여기에서 문자열 기반으로
     .sort()
     .join("-");
+
+  console.log("👉 현재 rareCombos 키:", currentComboKey);
 
   let comboMessage = "";
 
@@ -161,13 +173,17 @@ function chooseCard(choice) {
     if (upCount === 3) comboMessage = "정방향 3장! 운이 강하게 따라붙습니다 🎯";
     else if (downCount === 3) comboMessage = "모두 역방향... 예상과 다른 흐름이에요 ⚠️";
     else if (upCount === 2) comboMessage = "정방향 2장 😊 운이 트이기 시작했어요!";
-    else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요.";
-    else comboMessage = ""; // 정역 반반은 멘트 없음
+    else if (downCount === 2) comboMessage = "역방향 2장. 신중한 하루가 될 수도 있어요!";
+    else comboMessage = ""; // 정역 반반은 메시지 없음
   }
 
   let resultHTML = `<h3>🔮 ${choice} 선택 결과</h3>`;
   selectedSet.forEach(card => {
-    const info = tarotDeck[card.name][card.orientation];
+    const info = tarotDeck[card.name]?.[card.orientation];
+    if (!info) {
+      resultHTML += `<div class="card">❌ 오류: 알 수 없는 카드 (${card.name})</div>`;
+      return;
+    }
     const arrow = card.orientation === "up" ? "⬆️" : "⬇️";
     const direction = card.orientation === "up" ? "정방향" : "역방향";
     resultHTML += `
@@ -189,10 +205,10 @@ function chooseCard(choice) {
   let summaryHTML = `<h3>📊 다른 선택지 점수 요약</h3>`;
   ["A", "B", "C"].forEach(label => {
     if (label === choice) return;
-    const score = bundles[label].reduce(
-      (sum, c) => sum + tarotDeck[c.name][c.orientation].score,
-      0
-    );
+    const score = bundles[label].reduce((sum, c) => {
+      const info = tarotDeck[c.name]?.[c.orientation];
+      return sum + (info?.score || 0);
+    }, 0);
     const percent = Math.round((score / 30) * 100);
     summaryHTML += `<p>🔸 ${label} 카드: ${score}점 (${percent}%)</p>`;
   });
@@ -200,7 +216,6 @@ function chooseCard(choice) {
   document.getElementById("summary").innerHTML = summaryHTML;
   document.getElementById("buttonArea").style.display = "none";
 }
-
 function shareResult() {
   if (!selectedSet) return alert("카드를 먼저 선택해 주세요!");
   const shareText = selectedSet.map(card => {
@@ -238,5 +253,4 @@ window.onload = prepareDeck;
 </script>
 </body>
 </html>
-
 
